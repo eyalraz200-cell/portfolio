@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eyal Raz — Web Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Josefin+Slab:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="nav">
+    <a href="#work" class="nav-link is-current">Work</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </header>
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="nameplate">
+      <h1 class="nameplate-name">Eyal Raz</h1>
+      <p class="nameplate-role">Web Designer</p>
+    </div>
+
+    <div class="seam">
+      <span class="seam-rule"></span>
+      <span class="seam-label">Work</span>
+      <span class="seam-rule"></span>
+    </div>
+  </section>
+  <script>
+    /* Hero reveal. ONE table of timings (ms); the box / rule / seam
+       animations read them from --rv-* custom properties (styles.css,
+       "Hero reveal"), and the words are split into .letter spans with
+       staggered delays here. */
+    (function () {
+      var TIMING = {
+        widen: 340,     // thin line widens to the box's width
+        hold: 210,      // stays a line
+        open: 425,      // opens up vertically
+        letter: 47,     // ms per letter, name and role
+        roleGap: 235,   // pause between the name and the role
+        ruleAt: 575,    // rule starts sweeping, ms after the name starts
+        ruleDur: 1450,  // rule sweep
+        seamGap: 0,     // pause after the centre is done, before the seam
+        seamDur: 2100,  // dotted rules grow out
+        workLetter: 100 // ms per letter for "Work"
+      };
+      var ORIG = {};
+      function type(sel, start, perLetter) {
+        var el = document.querySelector(sel);
+        if (!el) return start;
+        if (!(sel in ORIG)) ORIG[sel] = el.textContent;
+        var text = ORIG[sel];
+        el.textContent = '';
+        for (var i = 0; i < text.length; i++) {
+          var sp = document.createElement('span');
+          sp.className = 'letter';
+          sp.textContent = text[i];
+          sp.style.animationDelay = (start + (i + 1) * perLetter) + 'ms';
+          el.appendChild(sp);
+        }
+        return start + text.length * perLetter;
+      }
+      function run(t) {
+        var box = t.widen + t.hold + t.open;
+        var t0 = box - 120;                       // words start as the box lands
+        var nameEnd = type('.nameplate-name', t0, t.letter);
+        var roleEnd = type('.nameplate-role', nameEnd + t.roleGap, t.letter);
+        var ruleEnd = t0 + t.ruleAt + t.ruleDur;
+        var seamAt = Math.max(roleEnd, ruleEnd) + t.seamGap;
+        type('.seam-label', seamAt, t.workLetter);
+        var r = document.documentElement.style;
+        r.setProperty('--rv-box-dur', box + 'ms');
+        r.setProperty('--rv-rule-at', (t0 + t.ruleAt) + 'ms');
+        r.setProperty('--rv-rule-dur', t.ruleDur + 'ms');
+        r.setProperty('--rv-seam-at', seamAt + 'ms');
+        r.setProperty('--rv-seam-dur', t.seamDur + 'ms');
+      }
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      run(TIMING);
+      /* scrolling away mid-reveal: every animation still pending or running
+         is sped up so it lands within RUSH ms from wherever it is now */
+      var RUSH = 300;
+      function finish() {
+        document.querySelector(".hero").getAnimations({ subtree: true }).forEach(function (a) {
+          var t = a.effect.getComputedTiming();
+          var remaining = (t.delay + t.activeDuration) - (a.currentTime || 0);
+          if (remaining > RUSH) a.playbackRate = remaining / RUSH;
+        });
+      }
+      ['wheel', 'touchmove', 'scroll'].forEach(function (ev) {
+        window.addEventListener(ev, finish, { once: true, passive: true });
+      });
+      /* re-run with different numbers (used by tuning harnesses) */
+      window.__heroReveal = function (patch) {
+        var t = {}; for (var k in TIMING) t[k] = TIMING[k]; for (k in patch) t[k] = patch[k];
+        var h = document.documentElement;
+        h.classList.add('rv-off');          // kills the animations (incl. ::before)
+        void document.body.offsetWidth;     // reflow, so removing it restarts them
+        run(t);
+        h.classList.remove('rv-off');
+      };
+    })();
+  </script>
+
+  <!-- ── Work ─────────────────────────────────────────────── -->
+
+  <section class="work" id="work">
+    <div class="project">
+      <h2 class="project-title">Extremes on both sides</h2>
+      <p class="project-blurb">A collaborative project with investigative magazine <a href="https://www.the7eye.org.il/" target="_blank" rel="noopener">&ldquo;The Seventh Eye,&rdquo;</a> exploring political protest and violence in Israel through interactive data visualization.</p>
+      <div class="project-actions">
+        <a href="#" class="button">View Case Study</a>
+        <a href="https://eyalraz200-cell.github.io/both-sides-project/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
+      </div>
+
+      <div class="project-media">
+        <video class="frame frame--full" src="vids/web/Hero.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/web/comparison.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/web/resize.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" src="vids/web/tiptoll.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+
+    <div class="project">
+      <h2 class="project-title">NEIGHPalm</h2>
+      <p class="project-blurb">Website design and development for NEIGHPalm, an AI-powered security and compliance platform</p>
+      <div class="project-actions">
+        <a href="neighpalm.html" class="button">View Case Study</a>
+        <a href="https://www.neighpalm.com/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
+      </div>
+
+      <div class="project-media project-media--plain">
+        <video class="frame frame--full" src="vids/neighpalm/np-hero-colors-1920.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="frame frame--np-layer3"><!-- wrapper clips the zoomed recording -->
+          <video src="vids/neighpalm/np-layer3.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        </div>
+        <video class="frame frame--np-scroll" src="vids/neighpalm/np-scroll.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/neighpalm/np-cursor.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/neighpalm/np-folds.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+
+    <div class="project">
+      <h2 class="project-title">&ldquo;Let There Be Light&rdquo; Festival</h2>
+      <p class="project-blurb">The Jewish creation story reimagined as a week-long festival: a landing page and a companion app</p>
+      <div class="project-actions">
+        <a href="let-there-be-light.html" class="button">View Case Study</a>
+        <a href="https://eyalraz200-cell.github.io/ltbl-site/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
+      </div>
+
+      <div class="project-media project-media--plain">
+        <video class="frame frame--full" src="vids/web/ltbl-hero.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/web/ltbl-hands.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--half" src="vids/web/ltbl-sea.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" src="vids/web/ltbl-layers.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+
+    <!-- Habiluim and Pantheon — hidden for now, restore by uncommenting
+    <div class="project">
+      <h2 class="project-title">Habiluim</h2>
+      <p class="project-blurb">Album redesign of &ldquo;Bereavement and Failure&rdquo; by the Israeli band Habiluim</p>
+      <div class="project-actions">
+        <a href="https://www.eyalraz.com/habiluim" class="button">View Case Study</a>
+      </div>
+
+      <div class="project-media">
+        <video class="frame frame--full" src="vids/web/hab-lettering.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <img class="frame frame--half" src="images/hab-cover.jpg" alt="Album cover">
+        <img class="frame frame--half" src="images/hab-back.jpg" alt="Album back cover">
+        <img class="frame frame--full" src="images/hab-spread.png" alt="Booklet spread">
+      </div>
+    </div>
+
+    <div class="project">
+      <h2 class="project-title">Pantheon</h2>
+      <p class="project-blurb">An infographic poster series charting the gods of Mesopotamia: how long they were worshipped, where they lived in society, and the forms they took</p>
+      <div class="project-actions">
+        <a href="#" class="button">View Case Study</a>
+      </div>
+
+      <div class="project-media">
+        <img class="frame frame--full" src="images/gods-lifespan.png" alt="Lifespan of Mesopotamian gods by cultural origin">
+        <img class="frame frame--half" src="images/gods-poster-1.png" alt="Mesopotamian gods across social contexts">
+        <img class="frame frame--half" src="images/gods-poster-2.png" alt="Physical manifestations of Mesopotamian gods">
+      </div>
+    </div>
+    -->
+  </section>
+
+  <script>
+    // Clips play only while on screen: rewind + play when a frame enters the
+    // viewport, pause when it leaves. Autoplay stays on the tags as a fallback.
+    (function () {
+      var vids = document.querySelectorAll('.project-media video');
+      if (!('IntersectionObserver' in window) || !vids.length) return;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) { v.currentTime = 0; v.play().catch(function () {}); }
+          else v.pause();
+        });
+      }, { threshold: 0.25 });
+      vids.forEach(function (v) { v.pause(); io.observe(v); });
+    })();
+  </script>
+
+  <script>
+    // Always open at the top, and scroll without leaving a #hash in the URL —
+    // otherwise a refresh jumps back to wherever you last clicked.
+    history.scrollRestoration = 'manual';
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    // Arc/Chrome can restore the old scroll position asynchronously, after load —
+    // so reassert the top on the next few frames rather than just once.
+    function toTop() { window.scrollTo(0, 0); }
+    toTop();
+    window.addEventListener('load', function () {
+      toTop();
+      requestAnimationFrame(toTop);
+      setTimeout(toTop, 120);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        var target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+  <!-- SCAFFOLDING — delete these tags and the _debug-* files when done. -->
+  <script>window.HARNESS_SERVER = "http://localhost:8090";</script>
+  <script src="_debug-bus.js"></script>
+  <script src="_debug-inspect.js"></script>
+  <script src="_debug-grid.js"></script>
+
+</body>
+</html>

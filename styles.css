@@ -1,0 +1,818 @@
+/* ── Base ─────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #000;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Layout grid (desktop) ────────────────────────────── */
+/* 12 columns across the viewport. Content blocks align to it via --content. */
+:root {
+  --grid-cols: 12;
+  --grid-margin: 24px;
+  --grid-gutter: 24px;
+}
+
+/* ── Nav ──────────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  top: 0;
+  padding: 34px 0 16px;
+  background: #fff;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 16px;
+}
+
+.nav-link {
+  font-weight: 300;
+  position: relative;
+  text-decoration: none;
+}
+
+/* the underline is a drawn hairline, not the browser's: a native 0.5px
+   underline gets rounded up to a whole pixel, this stays half a pixel.
+   It is always there, just invisible until hover — so nothing shifts. */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.25em;
+  height: 0.5px;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.nav-link:hover::after {
+  opacity: 1;
+}
+
+.nav-link.is-current {
+  font-weight: 400;
+}
+
+.nav-link.is-current::after {
+  opacity: 1;
+  height: 1px;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  /* svh = the viewport with mobile browser chrome showing, so the seam
+     isn't pushed under the address bar on a phone */
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.nameplate {
+  width: 348px;
+  max-width: 100%;
+  padding: 24px 20px;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* name → rule; the rule → role gap is the role's own padding-top below */
+  gap: 14px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* the rule sits on the role itself, so it is exactly as wide as the text.
+   It is drawn by ::before (not the border) so the reveal can sweep it in
+   left → right; the transparent border keeps the 1px in the layout. */
+.nameplate-role {
+  position: relative;
+  padding-top: 16px;
+  border-top: 1px solid transparent;
+}
+
+.nameplate-role::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.24);
+  transform-origin: 0 50%;
+  animation: rule-draw var(--rv-rule-dur) cubic-bezier(.2, .7, .2, 1) var(--rv-rule-at) both;
+}
+
+/* trim the font's built-in space above the caps and below the baseline,
+   so the gaps measure from the letters themselves */
+.nameplate-name,
+.nameplate-role {
+  margin: 0;
+  text-box: trim-both cap alphabetic;
+}
+
+.nameplate-name {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 100;
+  font-size: 50px;
+  line-height: 1;
+  letter-spacing: 3px;
+  color: #fff;
+}
+
+.nameplate-role {
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* ── Hero reveal ──────────────────────────────────────────
+   Every number lives in the script under the hero in index.html (one
+   TIMING table); it writes them here as --rv-* custom properties and
+   builds the per-letter spans. Sequence: the nameplate widens from a thin
+   centre line, holds, opens up; the name then the role type in while the
+   rule under the name sweeps left → right; after a gap, the seam's dotted
+   rules grow out from "Work" as it types in. */
+.nameplate {
+  animation: nameplate-open var(--rv-box-dur) cubic-bezier(.2, .7, .2, 1) both;
+}
+
+@keyframes nameplate-open {
+  /* widen → hold → open: 340 / 210 / 425 ms of 975 */
+  0%       { clip-path: inset(calc(50% - .5px) 50%); }
+  34.9%    { clip-path: inset(calc(50% - .5px) 0); }
+  56.4%    { clip-path: inset(calc(50% - .5px) 0); }
+  100%     { clip-path: inset(0); }
+}
+
+@keyframes rule-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* one span per letter, laid out in full from the start and switched visible
+   one at a time, so nothing re-centres while a word types in */
+.letter {
+  visibility: hidden;
+  animation: letter-in 1ms linear both;
+}
+
+@keyframes letter-in {
+  from { visibility: hidden; }
+  to   { visibility: visible; }
+}
+
+.seam-rule:first-child { transform-origin: 100% 50%; }
+.seam-rule:last-child  { transform-origin: 0 50%; }
+
+.seam-rule {
+  animation: rule-draw var(--rv-seam-dur) cubic-bezier(.2, .7, .2, 1) var(--rv-seam-at) both;
+}
+
+/* rv-off: set by the script for one frame to restart the sequence. */
+html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-rule {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nameplate, .nameplate-role::before, .seam-rule, .letter {
+    animation: none;
+    visibility: visible;
+  }
+}
+
+/* "WORK" label with dotted rules running out to both edges.
+   Pinned to the bottom of the hero's screen, so it sits just above the fold. */
+.seam {
+  position: absolute;
+  left: 67px;
+  right: 67px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  /* keeps the label's descenders off the very edge */
+  padding-bottom: 22px;
+}
+
+.seam-rule {
+  flex: 1;
+  border-top: 2px dotted rgba(0, 0, 0, 0.35);
+}
+
+.seam-label {
+  padding: 0 22px;
+  font-family: 'Josefin Slab', serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1;
+  text-transform: uppercase;
+  /* trim the box to the caps, so centring the rules against it puts them on
+     the visual middle of the letters rather than of the font's line box */
+  text-box: trim-both cap alphabetic;
+}
+
+/* ── Work ─────────────────────────────────────────────── */
+
+.work {
+  padding: 280px 24px 120px;
+}
+
+.project {
+  width: 100%;
+  /* one column of the 12-column page grid */
+  --col: calc((100% - 11 * var(--grid-gutter)) / 12);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.project + .project {
+  margin-top: 200px;
+}
+
+.project-title {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 300;
+  font-size: 38px;
+  line-height: 1.1;
+}
+
+.project-blurb {
+  margin-top: 16px;
+  max-width: 720px;
+  font-family: 'Josefin Slab', serif;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.project-blurb a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.5px;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition: text-decoration-color 0.18s ease;
+}
+
+.project-blurb a:hover {
+  text-decoration-color: currentColor;
+}
+
+.project-actions {
+  margin-top: 42px;
+  display: flex;
+  gap: 20px;
+}
+
+.project-actions .button {
+  margin-top: 0;
+}
+
+.button.button--site {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  color: #000;
+  border: 0.5px solid #000;
+  /* shave the border off the padding so it matches the black button's height */
+  padding: 10.5px 12px 8.5px;
+}
+
+.button-icon {
+  flex: none;
+}
+
+.button {
+  margin-top: 36px;
+  /* Josefin sits high in its em box: 2px more above than below centres the glyphs */
+  padding: 11px 12px 9px;
+  background: #000;
+  color: #fff;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* hover swaps the two button looks — colour only, nothing moves or grows.
+   The black button has no border, so the hairline comes from an inset
+   box-shadow and the box stays the same size. */
+.button:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: inset 0 0 0 0.5px #000;
+}
+
+.button.button--site:hover {
+  background: #000;
+  color: #fff;
+}
+
+.button-icon {
+  transition: transform 0.18s ease;
+}
+
+.button.button--site:hover .button-icon {
+  transform: translate(1px, -1px);
+}
+
+.project-media {
+  /* the media block is the middle 8 of the 12 page columns; every clip lives inside it */
+  width: calc(var(--col) * 8 + 7 * var(--grid-gutter));
+  margin-top: 41px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* gap between clips; the half width below must use the same number */
+  --clip-gap: 16px;
+  gap: var(--clip-gap);
+  /* lets a clip size its height from this block's width (cqw) */
+  container-type: inline-size;
+}
+
+.frame {
+  border: 0.5px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  flex: none;
+}
+
+/* NEIGHPalm and Let There Be Light: clips sit on the page with no frame */
+.project-media--plain .frame {
+  border: 0;
+}
+
+video.frame,
+img.frame {
+  display: block;
+  height: auto;
+  object-fit: contain;
+}
+
+/* sizes on the page grid: full = 8 columns, half = 4, quarter = 2 */
+/* full = the whole media block; half = exactly half of it, so a pair lines up
+   with the full clip's edges and never more than two fit on a row */
+.frame--full { width: 100%; }
+.frame--half { width: calc((100% - var(--clip-gap)) / 2); }
+.frame--quarter { width: calc(var(--col) * 2 + 1 * var(--grid-gutter)); }
+/* a 16:10 desktop clip and an uncropped phone clip (780x1688) on one row at the same
+   height: the split that equalises them is 77.6% / 22.4% of the row minus one gap */
+.frame--wide { width: calc((100% - var(--clip-gap)) * 0.7759); }
+.frame--tall { width: calc((100% - var(--clip-gap)) * 0.2241); }
+/* NEIGHPalm: the layer 3 recording (nearly square) beside the scroll clip (16:10),
+   58/42 split; layer 3 is cropped to the scroll clip's height, 100cqw = media block width */
+.frame--np-scroll { width: calc((100% - var(--clip-gap)) * 0.58); }
+.frame--np-layer3 {
+  width: calc((100% - var(--clip-gap)) * 0.42);
+  height: calc((100cqw - var(--clip-gap)) * 0.58 * 0.625);
+}
+/* the recording fills the frame, zoomed 6% around a point just above-left of centre */
+.frame--np-layer3 video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 43% 39%;
+  transform: scale(1.06);
+  transform-origin: 43% 39%;
+}
+
+/* stand-in until the real image / video is dropped into the frame */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f4f6;
+}
+
+.placeholder::before {
+  content: attr(data-placeholder);
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* ── About ────────────────────────────────────────────── */
+
+.about {
+  min-height: 100svh;
+  padding: 140px 24px 120px;
+  /* grid so the photo sets the row height: the text column stretches to it,
+     putting the title on the photo's top edge and the button on its bottom */
+  display: grid;
+  grid-template-columns: min(420px, 40%) minmax(0, 520px);
+  justify-content: center;
+  align-content: center;
+  gap: 60px;
+}
+
+/* portrait, framed like the project videos */
+.about-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border: none;
+  align-self: start;
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 0% 22%;
+}
+
+.about-text {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* the paragraphs fill the space between title and button, spreading evenly */
+.about-body {
+  max-width: 432px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-title {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.about-text p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.about-text p + p {
+  margin-top: 16px;
+}
+
+/* ── Contact ──────────────────────────────────────────── */
+
+/* the contact page is the one dark page: invert the ground and the nav */
+.is-dark,
+.is-dark .nav {
+  background: #000;
+  color: #fff;
+}
+
+.contact {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 140px 24px 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.contact-email {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 1.1;
+  /* long address: let it break rather than overflow on a phone */
+  overflow-wrap: anywhere;
+  /* the underline is painted, not native: Safari drops ink-skipping as soon as
+     text-underline-offset is set. The line is a background; a black-outlined
+     copy of the text sits between it and the real letters, so the line stops
+     short of every stroke (the y, the @, the g). */
+  text-decoration: none;
+  position: relative;
+  z-index: 0;
+  background: linear-gradient(#ffffff, #ffffff) no-repeat;
+  background-size: 100% 0.5px;
+  background-position: 0 calc(0.78em + 0.18em);
+}
+
+.contact-email::before {
+  content: "eyalraz200@gmail.com";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: transparent;
+  -webkit-text-stroke: 6.5px #000;
+}
+
+/* pinned to the bottom of the screen, like the "WORK" seam on the home page */
+.contact-caption {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  font-size: 20px;
+  color: #5c5c5c;
+}
+
+/* ── Project page ─────────────────────────────────────── */
+/* let-there-be-light.html etc. Same 8-of-12 column span the showcase media
+   uses on the home page, same frame border/radius, same gap between clips. */
+
+.page {
+  --col: calc((100% - 11 * var(--grid-gutter)) / 12);
+  --clip-gap: 16px;
+  --span: calc(var(--col) * 8 + 7 * var(--grid-gutter));
+  padding: 120px var(--grid-margin) 120px;
+}
+
+.page > * {
+  width: var(--span);
+  margin-inline: auto;
+}
+
+.page-head {
+  margin-top: 64px;
+  text-align: center;
+}
+
+.page-head .project-blurb {
+  max-width: 62ch;
+  margin-inline: auto;
+}
+
+.page-credit {
+  margin-top: 12px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.page-section {
+  margin-top: 140px;
+}
+
+.section-title {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+  margin-bottom: 48px;
+}
+
+.section-label {
+  margin: 0 0 20px;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.page-section > .media-row + .section-label,
+.caption + .section-label {
+  margin-top: 72px;
+}
+
+/* a row of shots; each shot shares the row equally, one shot = full width */
+.media-row {
+  display: flex;
+  gap: var(--clip-gap);
+  align-items: flex-start;
+}
+
+.media-row + .media-row {
+  margin-top: var(--clip-gap);
+}
+
+.media-row--center {
+  justify-content: center;
+}
+
+.shot {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* neighpalm.html: clips sit on the page with no frame, like the home page */
+.page--plain .shot {
+  border: 0;
+}
+
+.shot--hero {
+  width: var(--span);
+}
+
+/* landscape clips: shown whole at the row width, no cropping */
+.shot--crop {
+  object-fit: contain;
+}
+
+/* phone screens: fixed share of the row, never stretched wide */
+.shot--phone {
+  flex: 0 1 calc((100% - 3 * var(--clip-gap)) / 4);
+}
+
+/* app clips: shown whole at their slot width, no cropping */
+video.shot--phone {
+  object-fit: contain;
+}
+
+/* cutout sheets and the layering clip sit on the page, no frame around them */
+.shot--plain {
+  border: 0;
+  border-radius: 0;
+}
+
+.caption {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.caption--hint {
+  margin-top: -12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* Figma prototype embeds */
+.proto {
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  overflow: hidden;
+  background: #000;
+}
+
+.proto iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.proto--desktop {
+  aspect-ratio: 1920 / 1080;
+}
+
+.proto--phone {
+  width: min(360px, 100%);
+  aspect-ratio: 9 / 19.5;
+}
+
+.page-foot {
+  margin-top: 140px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.page-foot .button {
+  margin-top: 0;
+}
+
+/* ── Small screens ────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .nav {
+    padding-top: 24px;
+    gap: 24px;
+    font-size: 17px;
+  }
+
+  .nameplate-name {
+    font-size: 42px;
+  }
+
+  .nameplate-role {
+    font-size: 28px;
+  }
+
+  .seam {
+    left: 20px;
+    right: 20px;
+    padding-bottom: 16px;
+  }
+
+  .seam-label {
+    font-size: 22px;
+    padding: 0 14px;
+  }
+
+  .work {
+    padding: 96px 16px 80px;
+  }
+
+  .project-title {
+    font-size: 30px;
+  }
+
+  .project-blurb {
+    font-size: 17px;
+  }
+
+  .project-media {
+    gap: 16px;
+  }
+
+  .frame--full, .frame--half, .frame--quarter, .frame--wide, .frame--tall, .frame--np-scroll, .frame--np-layer3 {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .frame--np-layer3 { height: auto; aspect-ratio: 1784 / 1706; }
+
+  .about {
+    padding: 96px 16px 80px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .about-photo {
+    width: 100%;
+  }
+
+  .about-title {
+    font-size: 30px;
+  }
+
+  .about-text p {
+    font-size: 17px;
+  }
+
+  .contact {
+    padding: 96px 16px 80px;
+  }
+
+  .contact-caption {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .contact-email {
+    font-size: 26px;
+  }
+
+  .contact-caption {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 700px) {
+  .page {
+    --span: 100%;
+    padding-top: 100px;
+  }
+
+  .page-section {
+    margin-top: 96px;
+  }
+
+  .media-row {
+    flex-wrap: wrap;
+  }
+
+  .shot--phone {
+    flex: 0 1 calc((100% - var(--clip-gap)) / 2);
+  }
+}
