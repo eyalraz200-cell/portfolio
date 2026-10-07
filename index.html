@@ -114,17 +114,29 @@
   <section class="work" id="work">
     <div class="project">
       <h2 class="project-title">Extremes on both sides</h2>
-      <p class="project-blurb">A collaborative project with investigative magazine <a href="https://www.the7eye.org.il/" target="_blank" rel="noopener">&ldquo;The Seventh Eye,&rdquo;</a> exploring political protest and violence in Israel through interactive data visualization.</p>
+      <p class="project-blurb">A collaborative project with investigative magazine &ldquo;<a href="https://www.the7eye.org.il/" target="_blank" rel="noopener">The Seventh Eye</a>&rdquo;, exploring political protest and violence in Israel through interactive data visualization.</p>
       <div class="project-actions">
-        <a href="#" class="button">View Case Study</a>
+        <a href="#" class="button" hidden>View Case Study</a>
         <a href="https://eyalraz200-cell.github.io/both-sides-project/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
       </div>
 
       <div class="project-media">
-        <video class="frame frame--full" src="vids/web/Hero.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/web/comparison.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/web/resize.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--full" src="vids/web/tiptoll.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/Hero.mp4" media="(max-width: 700px)">
+          <source src="vids/web/Hero.mp4">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/comparison.mp4" media="(max-width: 700px)">
+          <source src="vids/web/comparison.mp4">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/resize.mp4" media="(max-width: 700px)">
+          <source src="vids/web/resize.mp4">
+        </video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/tiptoll.mp4" media="(max-width: 700px)">
+          <source src="vids/web/tiptoll.mp4">
+        </video>
       </div>
     </div>
 
@@ -132,18 +144,33 @@
       <h2 class="project-title">NEIGHPalm</h2>
       <p class="project-blurb">Website design and development for NEIGHPalm, an AI-powered security and compliance platform</p>
       <div class="project-actions">
-        <a href="neighpalm.html" class="button">View Case Study</a>
+        <a href="neighpalm.html" class="button" hidden>View Case Study</a>
         <a href="https://www.neighpalm.com/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
       </div>
 
       <div class="project-media project-media--plain">
-        <video class="frame frame--full" src="vids/neighpalm/np-hero-colors-1920.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/neighpalm/np-hero-colors-1920.mp4" media="(max-width: 700px)">
+          <source src="vids/neighpalm/np-hero-colors-1920.mp4?v=pp2">
+        </video>
         <div class="frame frame--np-layer3"><!-- wrapper clips the zoomed recording -->
-          <video src="vids/neighpalm/np-layer3.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+          <video autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/neighpalm/np-layer3.mp4" media="(max-width: 700px)">
+          <source src="vids/neighpalm/np-layer3.mp4?v=pp2">
+        </video>
         </div>
-        <video class="frame frame--np-scroll" src="vids/neighpalm/np-scroll.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/neighpalm/np-cursor.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/neighpalm/np-folds.mp4?v=pp2" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--np-scroll" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/neighpalm/np-scroll.mp4" media="(max-width: 700px)">
+          <source src="vids/neighpalm/np-scroll.mp4?v=pp2">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/neighpalm/np-cursor.mp4" media="(max-width: 700px)">
+          <source src="vids/neighpalm/np-cursor.mp4?v=pp2">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/neighpalm/np-folds.mp4" media="(max-width: 700px)">
+          <source src="vids/neighpalm/np-folds.mp4?v=pp2">
+        </video>
       </div>
     </div>
 
@@ -151,15 +178,27 @@
       <h2 class="project-title">&ldquo;Let There Be Light&rdquo; Festival</h2>
       <p class="project-blurb">The Jewish creation story reimagined as a week-long festival: a landing page and a companion app</p>
       <div class="project-actions">
-        <a href="let-there-be-light.html" class="button">View Case Study</a>
+        <a href="let-there-be-light.html" class="button" hidden>View Case Study</a>
         <a href="https://eyalraz200-cell.github.io/ltbl-site/" class="button button--site" target="_blank" rel="noopener">Visit Website <svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
       </div>
 
       <div class="project-media project-media--plain">
-        <video class="frame frame--full" src="vids/web/ltbl-hero.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/web/ltbl-hands.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--half" src="vids/web/ltbl-sea.mp4" autoplay muted loop playsinline preload="metadata"></video>
-        <video class="frame frame--full" src="vids/web/ltbl-layers.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/ltbl-hero.mp4" media="(max-width: 700px)">
+          <source src="vids/web/ltbl-hero.mp4">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/ltbl-hands.mp4" media="(max-width: 700px)">
+          <source src="vids/web/ltbl-hands.mp4">
+        </video>
+        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/ltbl-sea.mp4" media="(max-width: 700px)">
+          <source src="vids/web/ltbl-sea.mp4">
+        </video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/ltbl-layers.mp4" media="(max-width: 700px)">
+          <source src="vids/web/ltbl-layers.mp4">
+        </video>
       </div>
     </div>
 
@@ -168,11 +207,14 @@
       <h2 class="project-title">Habiluim</h2>
       <p class="project-blurb">Album redesign of &ldquo;Bereavement and Failure&rdquo; by the Israeli band Habiluim</p>
       <div class="project-actions">
-        <a href="https://www.eyalraz.com/habiluim" class="button">View Case Study</a>
+        <a href="https://www.eyalraz.com/habiluim" class="button" hidden>View Case Study</a>
       </div>
 
       <div class="project-media">
-        <video class="frame frame--full" src="vids/web/hab-lettering.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
+          <source src="vids/mobile/web/hab-lettering.mp4" media="(max-width: 700px)">
+          <source src="vids/web/hab-lettering.mp4">
+        </video>
         <img class="frame frame--half" src="images/hab-cover.jpg" alt="Album cover">
         <img class="frame frame--half" src="images/hab-back.jpg" alt="Album back cover">
         <img class="frame frame--full" src="images/hab-spread.png" alt="Booklet spread">
@@ -183,13 +225,13 @@
       <h2 class="project-title">Pantheon</h2>
       <p class="project-blurb">An infographic poster series charting the gods of Mesopotamia: how long they were worshipped, where they lived in society, and the forms they took</p>
       <div class="project-actions">
-        <a href="#" class="button">View Case Study</a>
+        <a href="#" class="button" hidden>View Case Study</a>
       </div>
 
       <div class="project-media">
-        <img class="frame frame--full" src="images/gods-lifespan.png" alt="Lifespan of Mesopotamian gods by cultural origin">
-        <img class="frame frame--half" src="images/gods-poster-1.png" alt="Mesopotamian gods across social contexts">
-        <img class="frame frame--half" src="images/gods-poster-2.png" alt="Physical manifestations of Mesopotamian gods">
+        <picture><source srcset="images/mobile/gods-lifespan.jpg" media="(max-width: 700px)"><img class="frame frame--full" src="images/gods-lifespan.png" alt="Lifespan of Mesopotamian gods by cultural origin"></picture>
+        <picture><source srcset="images/mobile/gods-poster-1.jpg" media="(max-width: 700px)"><img class="frame frame--half" src="images/gods-poster-1.png" alt="Mesopotamian gods across social contexts"></picture>
+        <picture><source srcset="images/mobile/gods-poster-2.jpg" media="(max-width: 700px)"><img class="frame frame--half" src="images/gods-poster-2.png" alt="Physical manifestations of Mesopotamian gods"></picture>
       </div>
     </div>
     -->

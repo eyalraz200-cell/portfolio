@@ -277,7 +277,7 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
 .project-blurb {
   margin-top: 16px;
   max-width: 720px;
-  font-family: 'Josefin Slab', serif;
+  font-family: 'Josefin Sans', sans-serif;
   font-weight: 200;
   font-size: 20px;
   line-height: 1.5;
@@ -713,6 +713,34 @@ video.shot--phone {
 
 /* ── Small screens ────────────────────────────────────── */
 
+/* a <picture> (mobile image swap) must not become the flex item itself,
+   or the frame widths would resolve against it instead of the media block */
+picture {
+  display: contents;
+}
+
+/* ── Tablet ───────────────────────────────────────────── */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .work {
+    padding: 180px 24px 100px;
+  }
+
+  .project + .project {
+    margin-top: 140px;
+  }
+
+  /* 10 of the 12 columns instead of 8 */
+  .project-media {
+    width: calc(var(--col) * 10 + 9 * var(--grid-gutter));
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+/* ── Phone ────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .nav {
     padding-top: 24px;
@@ -720,12 +748,21 @@ video.shot--phone {
     font-size: 17px;
   }
 
+  /* hero: a smaller nameplate; the reveal timings are unchanged */
+  .nameplate {
+    width: 260px;
+    padding: 18px 16px;
+    gap: 10px;
+  }
+
   .nameplate-name {
-    font-size: 42px;
+    font-size: 34px;
+    letter-spacing: 2px;
   }
 
   .nameplate-role {
-    font-size: 28px;
+    font-size: 22px;
+    padding-top: 12px;
   }
 
   .seam {
@@ -735,24 +772,43 @@ video.shot--phone {
   }
 
   .seam-label {
-    font-size: 22px;
-    padding: 0 14px;
+    font-size: 18px;
+    padding: 0 10px;
   }
 
+  /* projects */
   .work {
-    padding: 96px 16px 80px;
+    padding: 88px 16px 72px;
+  }
+
+  .project + .project {
+    margin-top: 112px;
   }
 
   .project-title {
-    font-size: 30px;
+    font-size: 28px;
   }
 
   .project-blurb {
-    font-size: 17px;
+    font-size: 16px;
   }
 
+  .project-actions {
+    margin-top: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  /* the media block spans the full content width, clips stack one per row */
   .project-media {
-    gap: 16px;
+    width: 100%;
+    margin-top: 28px;
+    gap: 12px;
+  }
+
+  .frame {
+    border-radius: 8px;
   }
 
   .frame--full, .frame--half, .frame--quarter, .frame--wide, .frame--tall, .frame--np-scroll, .frame--np-layer3 {
@@ -761,6 +817,7 @@ video.shot--phone {
   }
   .frame--np-layer3 { height: auto; aspect-ratio: 1784 / 1706; }
 
+  /* about */
   .about {
     padding: 96px 16px 80px;
     grid-template-columns: 1fr;
@@ -768,7 +825,8 @@ video.shot--phone {
   }
 
   .about-photo {
-    width: 100%;
+    width: min(100%, 300px);
+    margin: 0 auto;
   }
 
   .about-title {
@@ -779,21 +837,23 @@ video.shot--phone {
     font-size: 17px;
   }
 
+  /* contact */
   .contact {
     padding: 96px 16px 80px;
+  }
+
+  .contact-email {
+    font-size: 22px;
+  }
+
+  .contact-email::before {
+    -webkit-text-stroke: 4px #000;
   }
 
   .contact-caption {
     left: 16px;
     right: 16px;
     bottom: 16px;
-  }
-
-  .contact-email {
-    font-size: 26px;
-  }
-
-  .contact-caption {
     font-size: 17px;
   }
 }
@@ -815,4 +875,9 @@ video.shot--phone {
   .shot--phone {
     flex: 0 1 calc((100% - var(--clip-gap)) / 2);
   }
+}
+
+/* the hidden attribute always wins over a component display rule */
+[hidden] {
+  display: none !important;
 }
