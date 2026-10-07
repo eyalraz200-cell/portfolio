@@ -262,8 +262,15 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
     // Arc/Chrome can restore the old scroll position asynchronously, after load —
-    // so reassert the top on the next few frames rather than just once.
-    function toTop() { window.scrollTo(0, 0); }
+    // so reassert the top on the next few frames rather than just once. Stop
+    // the moment the visitor starts scrolling themselves: on a phone `load`
+    // fires late (after the videos' metadata), and yanking back to the top
+    // then would undo their scroll.
+    var userMoved = false;
+    ['touchstart', 'wheel', 'keydown', 'pointerdown'].forEach(function (ev) {
+      window.addEventListener(ev, function () { userMoved = true; }, { once: true, passive: true });
+    });
+    function toTop() { if (!userMoved) window.scrollTo(0, 0); }
     toTop();
     window.addEventListener('load', function () {
       toTop();
