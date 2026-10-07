@@ -818,15 +818,12 @@ picture {
   .frame--np-layer3 { height: auto; aspect-ratio: 1784 / 1706; }
 
   /* about */
+  /* one centred column, as wide as the photo, so the text's left and right
+     edges line up with the photo's */
   .about {
     padding: 96px 16px 80px;
-    grid-template-columns: 1fr;
+    grid-template-columns: min(100%, 300px);
     gap: 32px;
-  }
-
-  .about-photo {
-    width: min(100%, 300px);
-    margin: 0 auto;
   }
 
   .about-title {
