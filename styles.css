@@ -316,9 +316,6 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
   padding: 10.5px 12px 8.5px;
 }
 
-.button-icon {
-  flex: none;
-}
 
 .button {
   margin-top: 36px;
@@ -329,7 +326,6 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
   font-weight: 300;
   font-size: 14px;
   line-height: 1;
-  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
 /* hover swaps the two button looks — colour only, nothing moves or grows.
@@ -346,9 +342,6 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
   color: #fff;
 }
 
-.button-icon {
-  transition: transform 0.18s ease;
-}
 
 .button.button--site:hover .button-icon {
   transform: translate(1px, -1px);
@@ -393,6 +386,8 @@ img.frame {
 .frame--full { width: 100%; }
 .frame--half { width: calc((100% - var(--clip-gap)) / 2); }
 .frame--quarter { width: calc(var(--col) * 2 + 1 * var(--grid-gutter)); }
+/* a lone half clip sits flush with the media block's right edge instead of centred */
+.frame--right { margin-left: auto; }
 /* a 16:10 desktop clip and an uncropped phone clip (780x1688) on one row at the same
    height: the split that equalises them is 77.6% / 22.4% of the row minus one gap */
 .frame--wide { width: calc((100% - var(--clip-gap)) * 0.7759); }
@@ -403,6 +398,39 @@ img.frame {
 .frame--np-layer3 {
   width: calc((100% - var(--clip-gap)) * 0.42);
   height: calc((100cqw - var(--clip-gap)) * 0.58 * 0.625);
+}
+/* fade-loop clips (see the script in index.html): hold the last frame for
+   --hold-loop, then dim to the page background over --fade-loop instead of
+   cutting to frame one */
+.fade-loop { --hold-loop: 0.7s; --fade-loop: 0.6s; transition: opacity var(--fade-loop) ease; }
+.fade-loop.is-fading { opacity: 0; }
+/* NEIGHPalm clips fade to black, not the page — the wrapper's background is
+   what shows through while the video is faded out. The hero also holds its
+   last frame for less time. */
+.frame--np-hero, .frame--np-layers, .frame--np-s3 { background: #000; }
+.frame--np-hero .fade-loop { --hold-loop: 0.2s; }
+/* NEIGHPalm layers and section 3 clips: the house crop plus 0.29% more off the
+   right edge (= 3px on a 1041px frame) */
+.frame--np-layers, .frame--np-s3 { --crop-right: 0.29%; }
+.frame--crop.frame--np-layers video,
+.frame--crop.frame--np-s3 video { /* two classes: beats .frame--crop video below */
+  width: calc(100% + 2 * var(--crop) + var(--crop-right));
+  margin-right: calc(-1 * var(--crop) - var(--crop-right));
+}
+/* Let There Be Light hero: a longer hold on the last frame before the fade */
+.frame--ltbl-hero .fade-loop { --hold-loop: 1.6s; }
+/* cropped clips: the same slice trimmed off all four edges, as a share of the
+   frame's width so it scales with the window (the house rule, 2026-10-10):
+   0.76% = the 10px the user picked on a 1312px-wide full clip; 0.62% = 4px on a
+   half clip. Percent margins resolve against the containing block's WIDTH on
+   every side, which is exactly what makes the trim equal top/bottom/left/right. */
+.frame--crop { --crop: 0.76%; }
+.frame--half.frame--crop { --crop: 0.62%; }
+.frame--crop video {
+  display: block;
+  height: auto;
+  width: calc(100% + 2 * var(--crop));
+  margin: calc(-1 * var(--crop));
 }
 /* the recording fills the frame, zoomed 6% around a point just above-left of centre */
 .frame--np-layer3 video {

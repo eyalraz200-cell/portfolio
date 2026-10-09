@@ -10,7 +10,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=17">
 </head>
 <body>
 
@@ -121,22 +121,30 @@
       </div>
 
       <div class="project-media">
-        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/Hero.mp4" media="(max-width: 700px)">
-          <source src="vids/web/Hero.mp4">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/comparison.mp4" media="(max-width: 700px)">
-          <source src="vids/web/comparison.mp4">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/resize.mp4" media="(max-width: 700px)">
-          <source src="vids/web/resize.mp4">
-        </video>
-        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/tiptoll.mp4" media="(max-width: 700px)">
-          <source src="vids/web/tiptoll.mp4">
-        </video>
+        <div class="frame frame--full frame--crop"><!-- house crop and hold-then-fade loop; see styles.css .frame--crop / .fade-loop -->
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/reveal.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/reveal.mp4?v=t32">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/timeline.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/timeline.mp4?v=new1">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/resize.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/resize.mp4?v=t101">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/graph.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/graph.mp4?v=4k25">
+          </video>
+        </div>
       </div>
     </div>
 
@@ -149,28 +157,24 @@
       </div>
 
       <div class="project-media project-media--plain">
-        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/neighpalm/np-hero-colors-1920.mp4" media="(max-width: 700px)">
-          <source src="vids/neighpalm/np-hero-colors-1920.mp4?v=pp2">
-        </video>
-        <div class="frame frame--np-layer3"><!-- wrapper clips the zoomed recording -->
-          <video autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/neighpalm/np-layer3.mp4" media="(max-width: 700px)">
-          <source src="vids/neighpalm/np-layer3.mp4?v=pp2">
-        </video>
+        <div class="frame frame--full frame--crop frame--np-hero"><!-- house crop; 0.2s hold, fades to black (styles.css) -->
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/neighpalm/np-hero.mp4" media="(max-width: 700px)">
+            <source data-src="vids/neighpalm/np-hero.mp4?v=4k31">
+          </video>
         </div>
-        <video class="frame frame--np-scroll" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/neighpalm/np-scroll.mp4" media="(max-width: 700px)">
-          <source src="vids/neighpalm/np-scroll.mp4?v=pp2">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/neighpalm/np-cursor.mp4" media="(max-width: 700px)">
-          <source src="vids/neighpalm/np-cursor.mp4?v=pp2">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/neighpalm/np-folds.mp4" media="(max-width: 700px)">
-          <source src="vids/neighpalm/np-folds.mp4?v=pp2">
-        </video>
+        <div class="frame frame--full frame--crop frame--np-layers"><!-- house crop plus a sliver more off the right (styles.css) -->
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/neighpalm/np-layers.mp4" media="(max-width: 700px)">
+            <source data-src="vids/neighpalm/np-layers.mp4?v=4k31">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop frame--np-s3"><!-- house crop plus a sliver more off the right (styles.css) -->
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/neighpalm/np-s3.mp4" media="(max-width: 700px)">
+            <source data-src="vids/neighpalm/np-s3.mp4?v=4k31">
+          </video>
+        </div>
       </div>
     </div>
 
@@ -183,22 +187,30 @@
       </div>
 
       <div class="project-media project-media--plain">
-        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/ltbl-hero.mp4" media="(max-width: 700px)">
-          <source src="vids/web/ltbl-hero.mp4">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/ltbl-hands.mp4" media="(max-width: 700px)">
-          <source src="vids/web/ltbl-hands.mp4">
-        </video>
-        <video class="frame frame--half" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/ltbl-sea.mp4" media="(max-width: 700px)">
-          <source src="vids/web/ltbl-sea.mp4">
-        </video>
-        <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/ltbl-layers.mp4" media="(max-width: 700px)">
-          <source src="vids/web/ltbl-layers.mp4">
-        </video>
+        <div class="frame frame--full frame--crop frame--ltbl-hero"><!-- house crop; 1.6s hold before the fade (styles.css) -->
+          <video class="fade-loop" autoplay muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/ltbl-hero.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/ltbl-hero.mp4?v=2592">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop"><!-- ping-pong: the file holds forward + reverse, so a plain loop runs back and forth -->
+          <video autoplay muted loop playsinline preload="metadata">
+            <source data-src="vids/mobile/web/ltbl-1.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/ltbl-1.mp4?v=pp2592">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source data-src="vids/mobile/web/ltbl-2.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/ltbl-2.mp4?v=2592">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source data-src="vids/mobile/web/ltbl-3.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/ltbl-3.mp4?v=2592">
+          </video>
+        </div>
       </div>
     </div>
 
@@ -212,8 +224,8 @@
 
       <div class="project-media">
         <video class="frame frame--full" autoplay muted loop playsinline preload="metadata">
-          <source src="vids/mobile/web/hab-lettering.mp4" media="(max-width: 700px)">
-          <source src="vids/web/hab-lettering.mp4">
+          <source data-src="vids/mobile/web/hab-lettering.mp4" media="(max-width: 700px)">
+          <source data-src="vids/web/hab-lettering.mp4">
         </video>
         <img class="frame frame--half" src="images/hab-cover.jpg" alt="Album cover">
         <img class="frame frame--half" src="images/hab-back.jpg" alt="Album back cover">
@@ -284,6 +296,49 @@
         if (!target) return;
         event.preventDefault();
         target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Project clips load lazily and only play while on screen. Every <source>
+    // carries data-src instead of src, so nothing downloads until the clip is
+    // within a screen's height of the viewport; off-screen clips are paused so a
+    // phone never decodes eleven 60fps videos at once (that is what made it
+    // scroll badly). The browser still picks the phone/desktop source by itself.
+    (function () {
+      var clips = document.querySelectorAll('.project-media video');
+      function arm(v) {
+        if (v.dataset.armed) return;
+        v.dataset.armed = '1';
+        v.querySelectorAll('source[data-src]').forEach(function (src) {
+          src.setAttribute('src', src.dataset.src);
+        });
+        v.load();
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) { arm(v); v.play().catch(function () {}); }
+          else if (v.dataset.armed) { v.pause(); }
+        });
+      }, { rootMargin: '100% 0px' });
+      clips.forEach(function (v) { io.observe(v); });
+    })();
+
+    // Fade-loop clips: instead of snapping back to the first frame, the clip
+    // holds its last frame for --hold-loop, fades to the page background over
+    // --fade-loop, rewinds while invisible, then fades back in. Both times live
+    // in styles.css and are re-read every cycle, so tuning them live works.
+    document.querySelectorAll('video.fade-loop').forEach(function (v) {
+      function secs(name) { return parseFloat(getComputedStyle(v).getPropertyValue(name)) || 0; }
+      v.addEventListener('ended', function () {
+        setTimeout(function () {
+          v.classList.add('is-fading');
+          setTimeout(function () {
+            v.currentTime = 0;
+            v.play();
+            requestAnimationFrame(function () { v.classList.remove('is-fading'); });
+          }, secs('--fade-loop') * 1000);
+        }, secs('--hold-loop') * 1000);
       });
     });
   </script>
