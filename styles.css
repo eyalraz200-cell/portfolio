@@ -429,6 +429,10 @@ img.frame {
 .frame--crop video {
   display: block;
   height: auto;
+  /* every clip is 16:10 (3456x2160 masters). Lazy-loaded videos have no size
+     until their metadata arrives, so without this the frame pops open as you
+     reach it and the page jumps. */
+  aspect-ratio: 16 / 10;
   width: calc(100% + 2 * var(--crop));
   margin: calc(-1 * var(--crop));
 }
