@@ -10,7 +10,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=31">
+  <link rel="stylesheet" href="styles.css?v=33">
 </head>
 <body>
 
@@ -126,7 +126,7 @@
       var ease = function (t) { return -(Math.cos(Math.PI * t) - 1) / 2; };
       var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduced) { head.classList.add('is-revealed'); return; }
-      var start = performance.now() + DELAY, outAt = POP_IN + HOLD;
+      var start, outAt = POP_IN + HOLD;
       function tick(now) {
         var el = now - start;
         var rin = Math.max(0, Math.min(1, el / POP_IN));
@@ -136,7 +136,13 @@
         if (rout < 1) requestAnimationFrame(tick);
         else { sq.forEach(function (q) { q.style.display = 'none'; }); setTimeout(function () { head.classList.add('is-revealed'); }, BREAK); }
       }
-      requestAnimationFrame(tick);
+      function begin() { start = performance.now() + DELAY; requestAnimationFrame(tick); }
+      /* start on the first PAINTED frame: fonts and CSS can hold the first paint
+         back, and a clock started before it makes the pop look like a snap */
+      var fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+      fontsReady.then(function () {
+        requestAnimationFrame(function () { requestAnimationFrame(begin); });
+      });
     })();
   </script>
 
