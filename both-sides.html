@@ -122,7 +122,7 @@
       var head = document.querySelector('.hero-reveal');
       if (!head) return;
       var sq = head.querySelectorAll('.hero-sq');
-      var DELAY = 300, POP_IN = 325, HOLD = 650, POP_OUT = 215, BREAK = 100;
+      var DELAY = 100, POP_IN = 325, HOLD = 650, POP_OUT = 215, BREAK = 100;
       var ease = function (t) { return -(Math.cos(Math.PI * t) - 1) / 2; };
       var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduced) { head.classList.add('is-revealed'); return; }
