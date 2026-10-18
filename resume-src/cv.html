@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Eyal Raz - CV</title>
+<style>
+  @font-face { font-family: 'Josefin Sans'; src: url('fonts/JosefinSans[wght].ttf'); font-weight: 100 700; font-style: normal; }
+  @font-face { font-family: 'Josefin Slab'; src: url('fonts/JosefinSlab[wght].ttf'); font-weight: 100 700; font-style: normal; }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    width: 210mm; height: 297mm;
+    padding: 28mm 22mm 20mm;
+    background: #fff; color: #000;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    font-size: 11.5pt;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── nameplate, like the site's hero ── */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; }
+  .name {
+    font-family: 'Josefin Slab', serif;
+    font-weight: 100;
+    font-size: 46pt;
+    line-height: 1;
+    letter-spacing: 3pt;
+    text-transform: uppercase;
+  }
+  .role { margin-top: 8pt; font-weight: 500; font-size: 17pt; line-height: 1; letter-spacing: 1pt; text-transform: uppercase; }
+  .contact { text-align: right; font-weight: 300; font-size: 10pt; line-height: 1.6; }
+  .rule { height: 0.5pt; background: #000; margin: 12mm 0 12mm; }
+
+  /* ── two columns ── */
+  .cols { display: flex; gap: 14mm; }
+  .col-a { width: 62mm; flex: none; }
+  .col-b { flex: 1; }
+
+  h2 {
+    margin: 0 0 4mm;
+    font-family: 'Josefin Slab', serif;
+    font-weight: 600;
+    font-size: 12pt;
+    line-height: 1;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+  }
+  section + section { margin-top: 12mm; }
+
+  p { margin: 0; font-weight: 200; }
+  .item + .item { margin-top: 5.5mm; }
+  .item h3 { margin: 0; font-weight: 500; font-size: 11.5pt; line-height: 1.3; }
+  .item .where { font-weight: 300; }
+  .item .when { font-weight: 200; color: #555; }
+  .item .where .when::before { content: '\00a0\00a0\00b7\00a0\00a0'; color: #999; }
+  ul { margin: 1.5mm 0 0; padding-left: 4mm; font-weight: 200; }
+  li { margin: 0; }
+  li + li { margin-top: 0.5mm; }
+  .plain { list-style: none; padding: 0; }
+  .plain li + li { margin-top: 1.5mm; }
+  .plain .sub { display: block; font-weight: 200; color: #555; }
+</style>
+</head>
+<body>
+
+  <div class="head">
+    <div>
+      <div class="name">Eyal Raz</div>
+      <div class="role">Visual Designer</div>
+    </div>
+    <div class="contact">
+      <a href="mailto:eyalraz200@gmail.com">eyalraz200@gmail.com</a><br>
+      <a href="https://eyalraz.com">eyalraz.com</a><br>
+      Tel Aviv
+    </div>
+  </div>
+  <div class="rule"></div>
+
+  <div class="cols">
+    <div class="col-a">
+      <section>
+        <h2>Summary</h2>
+        <p>A hardworking, responsible and creative individual who enjoys learning and overcoming challenges. 30 years old, born in Tel Aviv. Passionate about reading, drumming, Muay Thai and traveling.</p>
+      </section>
+
+      <section>
+        <h2>Skills</h2>
+        <ul class="plain">
+          <li>Design thinking</li>
+          <li>Wireframing &amp; prototyping</li>
+          <li>Adobe Creative Suite, Figma and Framer</li>
+          <li>Fluent in English</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <ul class="plain">
+          <li>Shenkar College<span class="sub">Visual Arts &nbsp;·&nbsp; 2023 – present</span></li>
+          <li>Internal Compass<span class="sub">Professional Music School &nbsp;·&nbsp; 2018 – 2021</span></li>
+          <li>Ironi Yud Dalet<span class="sub">High School &nbsp;·&nbsp; 2007 – 2013</span></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="col-b">
+      <section>
+        <h2>Experience</h2>
+        <div class="item">
+          <h3>Art Appliance Sales</h3>
+          <div class="where">Pop Art<span class="when">2022 – 2023</span></div>
+        </div>
+        <div class="item">
+          <h3>Drum Set Instructor</h3>
+          <div class="where">Mitzpe Ramon Civic Center<span class="when">2018 – 2021</span></div>
+          <ul>
+            <li>Developed structured learning programs for students</li>
+            <li>Experience working with youth</li>
+          </ul>
+        </div>
+        <div class="item">
+          <h3>Barista</h3>
+          <div class="where">Beta Cafe<span class="when">2016 – 2018</span></div>
+          <ul>
+            <li>Strong communication skills</li>
+            <li>Ability to work under pressure</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Volunteering</h2>
+        <ul class="plain">
+          <li>CROW, Center for Rehabilitation of Wildlife<span class="sub">Durban, South Africa</span></li>
+          <li>Free the Bears<span class="sub">Phnom Penh, Cambodia</span></li>
+          <li>Save Vietnam's Wildlife<span class="sub">Ninh Binh, Vietnam</span></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -116,9 +116,11 @@ a {
   white-space: nowrap;
 }
 
-/* the rule sits on the role itself, so it is exactly as wide as the text.
-   It is drawn by ::before (not the border) so the reveal can sweep it in
-   left → right; the transparent border keeps the 1px in the layout. */
+/* the rule sits on the role element but is sized to the TITLE: the insets
+   below put its ends 1px outside the title's letters (tuned by eye, desktop;
+   the role box is 266px wide, the title's letters 267.3px). It is drawn by
+   ::before (not the border) so the reveal can sweep it in left → right; the
+   transparent border keeps the 1px in the layout. */
 .nameplate-role {
   position: relative;
   padding-top: 16px;
@@ -129,8 +131,8 @@ a {
   content: '';
   position: absolute;
   top: -1px;
-  left: 0;
-  right: 0;
+  left: -1.57px;
+  right: -1.56px;
   height: 1px;
   background: rgba(255, 255, 255, 0.24);
   transform-origin: 0 50%;
@@ -150,7 +152,10 @@ a {
   font-weight: 100;
   font-size: 50px;
   line-height: 1;
-  letter-spacing: 3px;
+  letter-spacing: 4.05px;
+  /* centred by its letters: the trailing letter-space pushes the word left by
+     half a space, so nudge it back by half (4.05 / 2) */
+  transform: translateX(2.02px);
   color: #fff;
 }
 
@@ -419,6 +424,10 @@ img.frame {
 }
 /* Let There Be Light hero: a longer hold on the last frame before the fade */
 .frame--ltbl-hero .fade-loop { --hold-loop: 1.6s; }
+/* each clip is a link to the project's site. display:contents keeps the .frame
+   itself as the flex item, so the row layout is untouched by the wrapper */
+.frame-link { display: contents; color: inherit; }
+.frame-link .frame { cursor: pointer; }
 /* cropped clips: the same slice trimmed off all four edges, as a share of the
    frame's width so it scales with the window (the house rule, 2026-10-10):
    0.76% = the 10px the user picked on a 1312px-wide full clip; 0.62% = 4px on a
@@ -433,6 +442,10 @@ img.frame {
      until their metadata arrives, so without this the frame pops open as you
      reach it and the page jumps. */
   aspect-ratio: 16 / 10;
+  /* the phone encodes are 1080x676, a hair taller than 16:10. The default
+     (contain) would shrink them inside the box and leave a sliver of the
+     clip's own dark right edge showing past the crop; cover fills the box. */
+  object-fit: cover;
   width: calc(100% + 2 * var(--crop));
   margin: calc(-1 * var(--crop));
 }
@@ -732,6 +745,83 @@ video.shot--phone {
   aspect-ratio: 9 / 19.5;
 }
 
+/* ── both-sides.html: an essay with pictures ─────────────── */
+/* images get the home page's frame: hairline border, 10px corners */
+.page--study .shot {
+  border: 0.5px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+.page--study .shot--sketch { border-radius: 10px; }
+/* the title block owns the first screen: centred in the viewport, the essay
+   starts below the fold. 100svh = the small viewport height, so a phone's
+   browser bars never push the credit line off screen. */
+.page--study .page-head {
+  /* pull up through the page's 120px top padding so the block spans the whole
+     viewport and its centre IS the viewport's centre */
+  min-height: 100svh;
+  margin-top: -120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+/* the home hero's "WORK" seam, reused as "CASE STUDY" at the foot of the first
+   screen. Spans the page column; no reveal animation here, so the rules are
+   simply drawn. */
+/* the three lines on the first screen, tuned by eye 2026-10-17 */
+.page--study .page-head .project-title { font-weight: 200; }
+.page--study .page-head .study-lede { margin-top: 12px; max-width: 790px; font-size: 22px; }
+.page--study .page-credit { margin-top: 16px; max-width: 720px; margin-inline: auto; font-weight: 200; font-size: 16px; color: rgba(0, 0, 0, 0.5); }
+.page--study .seam--study { left: 0; right: 0; } /* beats the phone rule below */
+/* hero reveal: two camp squares (settlers orange, anti-reform blue — the
+   project's own legend colours) pop in and out before the text fades in */
+.hero-squares {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.hero-sq { width: 10px; height: 10px; transform: scale(0); }
+.hero-sq--left { background: #6B89FF; }
+.hero-sq--right { background: #F9B624; }
+.hero-reveal > :not(.hero-squares) { opacity: 0; transition: opacity 600ms ease; }
+.hero-reveal.is-revealed > :not(.hero-squares) { opacity: 1; }
+.hero-reveal.is-revealed > .hero-squares { display: none; } /* no hairline left at scale(0) */
+.seam--study .seam-rule { animation: none; }
+/* body copy reads like the home page blurbs; pictures sit between paragraphs */
+.prose p {
+  max-width: 44ch;
+  margin-inline: auto; /* column centered on the page, text stays left-aligned */
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 1.5;
+}
+.prose p + p { margin-top: 1em; }
+.prose p strong { font-weight: 500; }
+.prose p a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.5px;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+.prose p a:hover { text-decoration-color: currentColor; }
+.prose .media-row { margin-top: 40px; }
+.prose .media-row + .media-row { margin-top: var(--clip-gap); } /* stacked pictures: clip gap, as on the home page */
+.prose .media-row + p { margin-top: 40px; }
+.prose .media-row + .caption--hint { margin-top: 12px; }
+.prose .section-title { max-width: 24ch; margin-inline: auto; text-align: center; font-weight: 200; }
+.study-lede { font-weight: 300; }
+/* the three phone screens share one row */
+.page--study .shot--phone {
+  flex: 0 1 calc((100% - 2 * var(--clip-gap)) / 3);
+  /* all three the same height: one phone-screen ratio, the odd capture trimmed to fit */
+  aspect-ratio: 902 / 1634;
+  object-fit: cover;
+}
+
 .page-foot {
   margin-top: 140px;
   display: flex;
@@ -780,21 +870,32 @@ picture {
     font-size: 17px;
   }
 
-  /* hero: a smaller nameplate; the reveal timings are unchanged */
+  /* hero: the desktop nameplate at 260 / 348 = 0.747 of its size, every value
+     scaled by the same factor (not `zoom`: Safari didn't scale letter-spacing
+     and the transform with it), so the ratios are exactly the desktop's. */
   .nameplate {
-    width: 260px;
-    padding: 18px 16px;
-    gap: 10px;
+    width: 255px;
+    padding: 19px 14.94px;   /* tuned by eye on an iPhone */
+    gap: 10.46px;
   }
 
   .nameplate-name {
-    font-size: 34px;
-    letter-spacing: 2px;
+    font-size: 37.36px;
+    /* tuned on an iPhone (390px): iOS renders the two faces at slightly
+       different widths than the Mac, so the title's spacing is not the scaled
+       desktop value */
+    letter-spacing: 2.25px;
+    transform: translateX(1.13px);
   }
 
   .nameplate-role {
-    font-size: 22px;
-    padding-top: 12px;
+    font-size: 25.4px;
+    padding-top: 11.95px;
+  }
+
+  .nameplate-role::before {
+    left: -1.72px;
+    right: -1.73px;
   }
 
   .seam {
@@ -901,9 +1002,24 @@ picture {
     flex-wrap: wrap;
   }
 
-  .shot--phone {
+  .shot--phone,
+  .page--study .shot--phone {
     flex: 0 1 calc((100% - var(--clip-gap)) / 2);
   }
+
+  .prose p { font-size: 18px; }
+  .page--study .shot { border-radius: 8px; }
+  /* picture gaps as on the home page's phone layout: 12px between pictures,
+     28px between a picture and the text */
+  .page { --clip-gap: 12px; }
+  .prose .media-row { margin-top: 28px; }
+  .prose .media-row + .media-row { margin-top: var(--clip-gap); }
+  .prose .media-row + p { margin-top: 28px; }
+  /* case study hero at phone sizes; the page's top padding is 100px here, so
+     the hero pulls up by the same amount and its seam lands on the fold */
+  .page--study .page-head { margin-top: -100px; }
+  .page--study .page-head .study-lede { font-size: 17px; margin-top: 16px; }
+  .page--study .page-credit { font-size: 14px; margin-top: 10px; }
 }
 
 /* the hidden attribute always wins over a component display rule */
