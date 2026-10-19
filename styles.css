@@ -16,6 +16,9 @@ body {
   color: #000;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 300;
+  /* no text highlighting: the site reads as a designed piece, not a document */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 h1,
