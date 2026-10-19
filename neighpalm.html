@@ -10,9 +10,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=33">
+  <link rel="stylesheet" href="styles.css?v=42">
 </head>
-<body>
+<body class="nav-wait">
 
   <header class="nav">
     <a href="index.html" class="nav-link is-current">Work</a>
@@ -20,55 +20,76 @@
     <a href="contact.html" class="nav-link">Contact</a>
   </header>
 
-  <main class="page page--plain">
+  <main class="page page--study page--np">
 
-    <!-- ── Hero ─────────────────────────────────────────────── -->
-    <video class="shot shot--hero" src="vids/neighpalm/np-hero-colors-1920.mp4" autoplay muted loop playsinline preload="metadata"></video>
-
-    <header class="page-head">
+    <header class="page-head hero-reveal">
+      <div class="hero-lattice" aria-hidden="true">
+        <svg class="hero-lattice-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- NEIGHPalm's pattern tile, verbatim from the site (180×180 block, repeats every 120). -->
+            <g id="np-tile" fill="none" stroke-width="2">
+              <path class="np-diamond" d="M70 70H110V110H70Z"/>
+              <path d="M50 109V130H71"/>
+              <path d="M71 50L50 50L50 71"/>
+              <path d="M130 71L130 50L109 50"/>
+              <path d="M109 130L130 130L130 109"/>
+              <path d="M80 180L80 160L80 140L80 120M80 140L60 140M80 160L60 160"/>
+              <path d="M0 80L20 80L40.0002 80L60 80M40.0002 80L40.0002 60M20 80L20 60"/>
+              <path d="M100 0L100 20L100 40.0002L100 60M100 40.0002L120 40.0002M100 20L120 20"/>
+              <path d="M180 100L160 100L140 100L120 100M140 100L140 120M160 100L160 120"/>
+              <path d="M71 150H49"/>
+              <path d="M30 71L30 49"/>
+              <path d="M109 30L131 30"/>
+              <path d="M150 109L150 131"/>
+              <!-- the diamond's four stubs, split out of the compound path so they can be their own phase (13–16) -->
+              <path d="M90 70V49"/>
+              <path d="M110 90H131"/>
+              <path d="M90 110V131"/>
+              <path d="M70 90H49.5"/>
+            </g>
+          </defs>
+          <g class="hero-lattice-cells"></g>
+        </svg>
+      </div>
       <h1 class="project-title">NEIGHPalm</h1>
-      <p class="project-blurb">NEIGHPalm is an AI-powered security and compliance platform. I designed and developed its marketing website: a dark, single-page experience that walks visitors through the product&rsquo;s three layers, its family of AI agents, and its plans.</p>
-      <p class="page-credit">Website design &amp; development, 2025. <a href="https://www.neighpalm.com/" target="_blank" rel="noopener">neighpalm.com</a></p>
+      <p class="project-blurb study-lede">Website design and development for an AI-powered security and compliance platform, brought to life through a modular visual language.</p>
+      <p class="page-credit">Landing page for an AI-powered security and compliance platform.</p>
+      <div class="seam seam--study">
+        <span class="seam-rule"></span>
+        <span class="seam-label">Case Study</span>
+        <span class="seam-rule"></span>
+      </div>
     </header>
 
-    <!-- ── Hero & visual language ───────────────────────────── -->
-    <section class="page-section">
-      <h2 class="section-title">Visual Language</h2>
-
-      <h3 class="section-label">The Pattern</h3>
-      <div class="media-row"><video class="shot" src="vids/neighpalm/np-cursor.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-      <p class="caption">The whole site sits on a generative lattice of diamonds and dashes, a nod to circuit traces and to the palm in the name. On the hero it reacts to the cursor: fragments light up and settle around the pointer, so the background feels alive without competing with the headline.</p>
-
-      <h3 class="section-label">One Pattern, Many Colours</h3>
-      <div class="media-row"><video class="shot" src="vids/neighpalm/np-folds.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-      <p class="caption">Each section of the page is marked by the same pattern in a different colour and density, so scrolling reads as moving between rooms rather than between unrelated blocks.</p>
+    <!-- ── Making complexity approachable ─────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">Visualizing Interconnectivity</h2>
+      <p>For this project, my main challenge was to visualize the product&rsquo;s interconnected nature, while also creating a distinctive visual language that reflects its technological character.</p>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-01.jpg" alt="The hero: headline over the lattice"></div>
+      <p>The website presents the platform in three layers, moving from its underlying knowledge base to its integrations and autonomous workers. This progression lets visitors build an understanding of the system one part at a time.</p>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-02.jpg" alt="Layer one, Security Brain"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-09.jpg" alt="Layer two, Automations and Integrations"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-12.jpg" alt="Layer three, the agents"></div>
     </section>
 
-    <!-- ── Structure ────────────────────────────────────────── -->
-    <section class="page-section">
-      <h2 class="section-title">Structure</h2>
-
-      <h3 class="section-label">Three Layers</h3>
-      <div class="media-row"><video class="shot" src="vids/neighpalm/np-scroll.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-      <p class="caption">The product is explained as three layers: a Security Brain, Automations &amp; Integrations, and the AI workforce on top. Each layer gets a full fold with the copy pinned on one side while the illustration scrolls past on the other.</p>
-
-      <h3 class="section-label">The Agents</h3>
-      <div class="media-row"><video class="shot" src="vids/neighpalm/np-layer3.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-      <p class="caption">Layer three introduces six named agents, each with its own glyph drawn from the site pattern and its own colour. The glyphs animate in as the fold enters the viewport.</p>
-
-      <h3 class="section-label">Plans</h3>
-      <div class="media-row"><img class="shot" src="images/np-pricing.png" alt="Pricing section: Free, SOC 2 minded and 360° + AI plans"></div>
-      <p class="caption">Three plans, each headed by a glyph that grows in complexity with the tier, from a single diamond to the full lattice.</p>
+    <!-- ── A connected visual language ────────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">A Connected Visual Language</h2>
+      <p>A repeating geometric motif connects the site&rsquo;s backgrounds, illustrations, and animations. Its variations represent both the product&rsquo;s individual components and the connections between them, while giving each section its own character.</p>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-13.jpg" alt="Fold three: Turn complexity into focus"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-14.jpg" alt="Fold three: Certification without the fog"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-15.jpg" alt="Fold three: Continuity that matches reality"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-16.jpg" alt="The operator section"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-17.jpg" alt="The operator section, hovered"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-22.jpg" alt="The closing call to action"></div>
     </section>
 
-    <!-- ── Mobile ───────────────────────────────────────────── -->
-    <section class="page-section">
-      <h2 class="section-title">Mobile</h2>
-      <div class="media-row"><video class="shot" src="vids/neighpalm/np-phones.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-      <div class="media-row media-row--center">
-        <video class="shot shot--phone" src="vids/neighpalm/np-phone.mp4" autoplay muted loop playsinline preload="metadata"></video>
-      </div>
-      <p class="caption">On phones the side-by-side folds stack, the pattern thins out so text stays legible, and the agent glyphs become the main illustration for each section.</p>
+    <!-- ── NEIGH, the accompanying website ─────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">NEIGH</h2>
+      <p>As the consulting company behind NEIGHPalm, NEIGH shares its visual language. For its landing page, I rotated the geometric motif by 45 degrees to convey order and a more traditional consulting approach while maintaining a clear connection between the two.</p>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-25.jpg" alt="NEIGH: Security Leadership For Companies That Move Fast"></div>
+      <div class="media-row"><img class="shot" src="images/neighpalm/np-23.jpg" alt="NEIGH: the two pillars and their goals"></div>
     </section>
 
     <nav class="page-foot">
@@ -77,6 +98,256 @@
     </nav>
 
   </main>
+
+  <script>
+    /* Hero reveal: NEIGHPalm's own lattice builds in the way it does on the site
+       (playPatternBuild): the diamonds fade up top→bottom, then the arms draw on
+       along their own length with scattered starts. It holds, fades out, and the
+       text fades in. Tile + 120px grid + −45° bake are the site's.
+       Exposed as window.npReveal(opts) so the compare harness can re-run it. */
+    (function () {
+      var head = document.querySelector('.hero-reveal');
+      var proto = head && head.querySelector('.hero-lattice');
+      if (!proto) return;
+      var template = proto.cloneNode(true);
+      var DEFAULTS = {
+        extent: 'unit',      // full | column | row | cross | block | unit | cluster | band | ring | scatter
+        strip: 100,          // half-width in px of the column/row/band, radius unit for cluster/ring
+        rings: 1,            // unit: how many rings of neighbours around the centre block
+        hide: ['0,0:0','0,0:13','0,0:14','0,0:15','0,0:16'], // the square and its four stubs (the only vectors that stay)
+        invert: true,        // false: picked = deleted · true: picked = the only ones that stay
+        pick: false,         // click vectors on the page to delete / restore them
+        onToggle: null,      // fn(id, hidden) in pick mode
+        colour: '#000000', diamond: '#000000',
+        cover: 'head',       // head | nav (over the nav bar too)
+        build: 'phases',     // option 1 (picked 2026-10-19): hand-picked order below. Option 2 was: extent 'full', build 'centre', cover 'nav', width 1.5, dur 1500, hold 50, fade 450
+        after: 'fade',       // fade | stay | ghost | erode | zoom
+        width: 2, cell: 120, dur: 2400, hold: 120, fade: 390, break_: 40,
+        text: 600,           // ms the text takes to fade in
+        /* build 'phases': hand-picked draw order (2026-10-19): the diamond, then
+           its four chevrons, then the eight inner arms, then the eight outer arms */
+        phases: {"0,0:0":1,"0,0:13":2,"0,0:14":2,"0,0:15":2,"0,0:16":2,"0,0:4":2,"0,0:1":2,"0,0:2":2,"0,0:3":2,"0,0:8":3,"0,1:6":3,"0,0:7":3,"-1,0:5":3,"0,0:6":3,"0,-1:8":3,"0,0:5":3,"1,0:7":3,"1,0:11":4,"0,0:12":4,"0,0:9":4,"0,-1:12":4,"0,0:10":4,"-1,0:9":4,"0,0:11":4,"0,1:10":4},
+        phaseDur: 500,       // ms each phase takes to draw (fallback)
+        phaseDurs: { 1: 480, 2: 280 }, // option 1 pick (600/350) scaled so the whole reveal lasts 1390ms like Both Sides
+        phaseStyle: {},      // per phase: 'fade' in or 'draw' on (default draw). Option 1 (2026-10-19): everything draws
+        square: 'leftRight', // how the square is cut into pens when it draws: see SQUARES
+        phaseGap: 80,        // ms between phases (negative = overlap)
+        pickPhase: 1,        // pick mode: the phase a click assigns
+        nav: true            // nav links fade in together with the text
+      };
+      var current = null, raf = 0, timers = [];
+      /* the square (tile 70,70 → 110,110; its top-left corner is the TOP on screen)
+         cut into pens. All pieces share path index 0, so ids and phases still work. */
+      var SQUARES = {
+        /* screen corners: tile (110,70) = top, (70,110) = bottom, (70,70) = left, (110,110) = right */
+        around:      ['M70 70H110V110H70Z'],
+        fromTop:     ['M110 70H70V110', 'M110 70V110H70'],
+        fromBottom:  ['M70 110V70H110', 'M70 110H110V70'],
+        fromLeft:    ['M70 70H110V110', 'M70 70V110H110'],
+        fromRight:   ['M110 110H70V70', 'M110 110V70H70'],
+        topBottom:   ['M110 70H70', 'M110 70V110', 'M70 110V70', 'M70 110H110'],
+        leftRight:   ['M70 70H110', 'M70 70V110', 'M110 110V70', 'M110 110H70'],
+        edgesCW:     ['M70 70H110', 'M110 70V110', 'M110 110H70', 'M70 110V70'],
+        midOut:      ['M90 70H70', 'M90 70H110', 'M110 90V70', 'M110 90V110', 'M90 110H110', 'M90 110H70', 'M70 90V110', 'M70 90V70'],
+        cornersOut:  ['M70 70H90', 'M70 70V90', 'M110 70H90', 'M110 70V90', 'M110 110H90', 'M110 110V90', 'M70 110H90', 'M70 110V90']
+      };
+      function clear() {
+        cancelAnimationFrame(raf); timers.forEach(clearTimeout); timers = [];
+        document.querySelectorAll('.hero-lattice').forEach(function (w) { w.remove(); });
+        head.classList.remove('is-revealed'); document.body.classList.remove('nav-wait', 'nav-in');
+      }
+      function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+      function run(opts) {
+        var o = {}; for (var k in DEFAULTS) o[k] = DEFAULTS[k]; for (k in (opts || {})) o[k] = opts[k];
+        clear(); current = o;
+        head.style.setProperty('--np-text', o.text + 'ms');
+        document.body.classList.toggle('nav-wait', !!o.nav);
+        var wrap = template.cloneNode(true), svg = wrap.querySelector('svg'), cellsG = svg.querySelector('.hero-lattice-cells'), tile = svg.querySelector('#np-tile');
+        tile.setAttribute('stroke-width', o.width);
+        (function () { /* swap the square for the chosen cut */
+          var old = tile.querySelector('.np-diamond'), ds = SQUARES[o.square] || SQUARES.around;
+          ds.forEach(function (dd) {
+            var np = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            np.setAttribute('class', 'np-diamond'); np.setAttribute('d', dd); tile.insertBefore(np, old);
+          });
+          old.remove();
+        })();
+        wrap.style.setProperty('--np-arm', o.colour); wrap.style.setProperty('--np-dia', o.diamond);
+        if (o.cover === 'nav') { wrap.classList.add('hero-lattice--fixed'); document.body.appendChild(wrap); }
+        else head.insertBefore(wrap, head.firstChild);
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) { wrap.remove(); head.classList.add('is-revealed'); return; }
+
+        var CELL = o.cell, W = wrap.clientWidth, H = wrap.clientHeight;
+        var side = Math.hypot(W, H) * 1.03, n = Math.ceil(side / CELL) + 2, size = n * CELL, c0 = size / 2;
+        var SC = CELL / 120; // the tile is drawn for a 120 grid
+        svg.setAttribute('width', size); svg.setAttribute('height', size);
+        svg.style.left = (W - size) / 2 + 'px'; svg.style.top = (H - size) / 2 + 'px';
+        var COS = Math.SQRT1_2, SIN = -Math.SQRT1_2, pad = CELL * 2.5, S = o.strip;
+        var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+        /* a cell is located by its DIAMOND (tile 90,90), not the cell corner, so
+           "the middle" is a diamond; the whole grid is then shifted so the nearest
+           diamond sits exactly on the centre */
+        var cells = [], D = 90 * SC;
+        for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+          var x = c * CELL, y = r * CELL, rx = x + D - c0, ry = y + D - c0;
+          var sx = W / 2 + (rx * COS - ry * SIN), sy = H / 2 + (rx * SIN + ry * COS);
+          if (sx < -pad || sx > W + pad || sy < -pad || sy > H + pad) continue;
+          cells.push({ x: x, y: y, r: r, c: c, sx: sx, sy: sy, dx: sx - W / 2, dy: sy - H / 2 });
+        }
+        var best = cells.slice().sort(function (p, q) { return Math.hypot(p.dx, p.dy) - Math.hypot(q.dx, q.dy); })[0];
+        if (best) {
+          svg.style.left = (W - size) / 2 - best.dx + 'px'; svg.style.top = (H - size) / 2 - best.dy + 'px';
+          cells.forEach(function (q) { q.dx -= best.dx; q.dy -= best.dy; q.sx -= best.dx; q.sy -= best.dy; q.dr = q.r - best.r; q.dc = q.c - best.c; });
+        }
+        var hidden = {}; (o.hide || []).forEach(function (id) { hidden[id] = true; });
+        var keep;
+        switch (o.extent) {
+          case 'column': keep = function (q) { return Math.abs(q.dx) < S; }; break;
+          case 'row': keep = function (q) { return Math.abs(q.dy) < S; }; break;
+          case 'cross': keep = function (q) { return Math.abs(q.dx) < S || Math.abs(q.dy) < S; }; break;
+          case 'block': keep = function (q) { return q === best; }; break;
+          case 'unit': keep = function (q) { return Math.abs(q.dr) <= o.rings && Math.abs(q.dc) <= o.rings; }; break;
+          case 'cluster': keep = function (q) { return Math.hypot(q.dx, q.dy) < S * 2; }; break;
+          case 'band': keep = function (q) { return Math.abs(q.dx + q.dy) / Math.SQRT2 < S; }; break;
+          case 'ring': keep = function (q) { var d = Math.hypot(q.dx, q.dy); return d > S * 2.6 && d < S * 2.6 + S; }; break;
+          case 'scatter': keep = function () { return rnd() < 0.25; }; break;
+          default: keep = function () { return true; };
+        }
+        var frag = document.createDocumentFragment(), shapes = [];
+        cells.forEach(function (q) {
+          if (!keep(q)) return;
+          var g = tile.cloneNode(true); g.removeAttribute('id');
+          g.setAttribute('transform', 'rotate(-45 ' + c0 + ' ' + c0 + ') translate(' + q.x + ' ' + q.y + ') scale(' + SC + ')');
+          frag.appendChild(g);
+          var ps = Array.prototype.slice.call(g.querySelectorAll('path'));
+          var pi = -1;
+          ps.forEach(function (pth) {
+            if (!pth.classList.contains('np-diamond') || pi < 0) pi++;   /* every square piece is index 0 */
+            var i = pth.classList.contains('np-diamond') ? 0 : pi;
+            var id = q.dr + ',' + q.dc + ':' + i; pth.dataset.id = id;
+            var gone = o.invert ? !hidden[id] : !!hidden[id];
+            if (gone) { pth.remove(); return; }
+            if (o.phases[id]) pth.setAttribute('data-phase', o.phases[id]);
+            pth._sx = q.sx; pth._sy = q.sy; pth._d = Math.hypot(q.dx, q.dy); shapes.push(pth);
+            if (o.pick) { /* fat invisible twin so a 2px line is clickable */
+              var hit = pth.cloneNode(false); hit.removeAttribute('class'); hit.classList.add('np-hit'); hit._for = pth; g.appendChild(hit);
+            }
+          });
+        });
+        cellsG.appendChild(frag);
+        if (o.pick) {
+          wrap.classList.add('hero-lattice--pick');
+          cellsG.onclick = function (e) {
+            var h = e.target.closest('.np-hit'); if (!h) return;
+            var want = window.npPickPhase || o.pickPhase, pth = h._for, cur = +pth.getAttribute('data-phase') || 0, next = cur === want ? 0 : want;
+            if (next) pth.setAttribute('data-phase', next); else pth.removeAttribute('data-phase');
+            if (o.onToggle) o.onToggle(pth.dataset.id, next);
+          };
+          cellsG.onmouseover = function (e) { var h = e.target.closest('.np-hit'); if (h) h._for.classList.add('np-hover'); };
+          cellsG.onmouseout = function (e) { var h = e.target.closest('.np-hit'); if (h) h._for.classList.remove('np-hover'); };
+        }
+        if (!shapes.length) { head.classList.add('is-revealed'); return; }
+
+        /* per-stroke windows, as on the site, keyed on the chosen build order */
+        var lo = Infinity, hi = -Infinity, lMax = 1;
+        var keyOf = function (s) { return o.build === 'sweep' ? s._sx : o.build === 'centre' ? s._d : s._sy; };
+        shapes.forEach(function (s) {
+          var L = s.getTotalLength(); s._L = L; if (L > lMax) lMax = L; s.style.strokeDasharray = L;
+          var kv = keyOf(s); if (kv < lo) lo = kv; if (kv > hi) hi = kv;
+        });
+        var DIA_STAGGER = 0.42, DIA_SPAN = 0.2, ARM_START = 0.3, ARM_PEN = 1.4;
+        var span = (hi - lo) || 1, armK = (1 - ARM_START) / 0.6, armSpan = 0.35 * armK;
+        /* hand-picked phases: every vector draws on along its length, phase by
+           phase; unassigned vectors form a final phase of their own */
+        var maxPh = 0, anyUnassigned = false;
+        shapes.forEach(function (s) { var ph = o.phases[s.dataset.id] || 0; if (ph > maxPh) maxPh = ph; if (!ph) anyUnassigned = true; });
+        var nPh = maxPh + (anyUnassigned ? 1 : 0), durs = o.phaseDurs || {};
+        var phDur = function (k) { return +durs[k] || o.phaseDur; };
+        var phStart = [], acc = 0;
+        for (var k = 1; k <= nPh; k++) { phStart[k] = acc; acc += phDur(k) + o.phaseGap; }
+        var phTotal = Math.max(1, acc - o.phaseGap);
+        if (o.build === 'phases') o.dur = phTotal;
+        /* one pen speed per phase: the phase's duration is the time its LONGEST
+           vector takes, shorter ones finish proportionally sooner, so every line
+           is drawn at the same speed instead of stretched to the same clock */
+        var phLmax = {};
+        shapes.forEach(function (s) { var k = o.phases[s.dataset.id] || (maxPh + 1); if (s._L > (phLmax[k] || 0)) phLmax[k] = s._L; });
+        shapes.forEach(function (s) {
+          var nk = (keyOf(s) - lo) / span;
+          /* phases: the first phase fades in, the rest draw on */
+          s._fade = o.build === 'phases' ? (o.phaseStyle || {})[o.phases[s.dataset.id] || (maxPh + 1)] === 'fade' : s.classList.contains('np-diamond');
+          if (o.build === 'phases') {
+            var ph = o.phases[s.dataset.id] || (maxPh + 1);
+            var share = s._fade ? 1 : s._L / (phLmax[ph] || s._L);
+            s._t0 = phStart[ph] / phTotal; s._t1 = s._t0 + phDur(ph) * share / phTotal;
+          }
+          else if (o.build === 'instant') { s._t0 = 0; s._t1 = 0.02; }
+          else if (s._fade) { s._t0 = nk * DIA_STAGGER; s._t1 = s._t0 + DIA_SPAN; }
+          else {
+            s._t0 = Math.max(ARM_START, ARM_START + (nk + (Math.random() - 0.5) * 0.1) * armSpan);
+            s._t1 = Math.min(s._t0 + (0.10 + (s._L / lMax) * 0.14) * armK * ARM_PEN, 1);
+          }
+          if (s._fade) { s.style.strokeDashoffset = '0'; s.style.opacity = '0'; } else s.style.strokeDashoffset = s._L;
+          s._p = -1;
+        });
+        function paint(t) {
+          for (var i = 0; i < shapes.length; i++) {
+            var s = shapes[i], p = (t - s._t0) / ((s._t1 - s._t0) || 1);
+            p = p <= 0 ? 0 : p >= 1 ? 1 : p;
+            if (p === s._p) continue; s._p = p;
+            if (s._fade) s.style.opacity = p === 1 ? '' : p.toFixed(3);
+            else s.style.strokeDashoffset = (s._L * (1 - p)).toFixed(2);
+          }
+        }
+        function reveal() {
+          if (o.pick) return; /* picking: keep the text out of the way */
+          head.classList.add('is-revealed');
+          if (o.nav) document.body.classList.add('nav-in');
+        }
+        function settle() {
+          /* keep it on the page: tuck it behind the text (and the nav) */
+          if (o.cover === 'nav') { wrap.classList.remove('hero-lattice--fixed'); head.insertBefore(wrap, head.firstChild); }
+          wrap.classList.add('hero-lattice--behind');
+        }
+        var start;
+        function tick(now) {
+          var t = Math.min(1, (now - start) / o.dur); paint(t);
+          if (t < 1) { raf = requestAnimationFrame(tick); return; }
+          later(function () {
+            var ease = 'opacity ' + o.fade + 'ms ease, transform ' + o.fade + 'ms ease';
+            switch (o.after) {
+              case 'stay': settle(); reveal(); break;
+              case 'ghost': settle(); wrap.style.transition = ease; wrap.style.opacity = '0.35'; reveal(); break;
+              case 'erode':
+                var s0 = performance.now();
+                (function back(now2) {
+                  var u = Math.min(1, (now2 - s0) / o.fade); paint(1 - u);
+                  if (u < 1) raf = requestAnimationFrame(back); else { wrap.remove(); later(reveal, o.break_); }
+                })(s0); break;
+              case 'zoom':
+                wrap.style.transition = ease; wrap.style.transformOrigin = '50% 50%';
+                wrap.style.transform = 'scale(1.18)'; wrap.style.opacity = '0';
+                later(function () { wrap.remove(); reveal(); }, o.fade + o.break_); break;
+              default:
+                wrap.style.transition = ease; wrap.style.opacity = '0';
+                later(function () { wrap.remove(); reveal(); }, o.fade + o.break_);
+            }
+          }, o.hold);
+        }
+        start = performance.now(); raf = requestAnimationFrame(tick);
+      }
+      window.npReveal = run; window.npRevealDefaults = DEFAULTS;
+      var fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+      fontsReady.then(function () { requestAnimationFrame(function () { requestAnimationFrame(function () { run(); }); }); });
+    })();
+  </script>
+
+  <!-- SCAFFOLDING — delete these tags and the _debug-* files when done. -->
+  <script>window.HARNESS_SERVER = "http://192.168.0.136:8090";</script>
+  <script src="_debug-bus.js"></script>
+  <script src="_debug-inspect.js"></script>
+  <script src="_debug-visual-edit.js"></script>
 
 </body>
 </html>

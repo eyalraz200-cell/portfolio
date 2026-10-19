@@ -752,6 +752,7 @@ video.shot--phone {
   border-radius: 10px;
 }
 .page--study .shot--sketch { border-radius: 10px; }
+.page--np .shot { border: 0; } /* NEIGHPalm shots are dark on white: no hairline */
 /* the title block owns the first screen: centred in the viewport, the essay
    starts below the fold. 100svh = the small viewport height, so a phone's
    browser bars never push the credit line off screen. */
@@ -787,8 +788,60 @@ video.shot--phone {
 .hero-sq { width: 10px; height: 10px; transform: scale(0); }
 .hero-sq--left { background: #6B89FF; }
 .hero-sq--right { background: #F9B624; }
-.hero-reveal > :not(.hero-squares) { opacity: 0; transition: opacity 600ms ease; }
-.hero-reveal.is-revealed > :not(.hero-squares) { opacity: 1; }
+.hero-reveal > :not(.hero-squares, .hero-lattice, .hero-god) { opacity: 0; transition: opacity var(--np-text, 600ms) ease; }
+/* case-study reveals: the nav links wait for the text and fade in with it */
+.nav-wait .nav-link { opacity: 0; transition: opacity var(--np-text, 600ms) ease; }
+.nav-in .nav-link { opacity: 1; }
+.hero-reveal.is-revealed > :not(.hero-squares, .hero-lattice, .hero-god) { opacity: 1; }
+/* Let There Be Light hero reveal: the god logo starts above the screen and
+   drops to the centre of the first screen (the page head is one viewport tall) */
+.hero-god {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 110px;
+  height: auto;
+  margin: -37px 0 0 -55px; /* half of 110 × 478/710 */
+  z-index: 20; /* in front of the fixed nav (z 10) */
+  transform: translateY(calc(-50vh - 100%));
+  pointer-events: none;
+  filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, .93)); /* the site's --shadow-logo */
+}
+.hero-god.is-down { transform: translateY(0); }
+/* NEIGHPalm hero reveal: the site's vector lattice, built in by neighpalm.html's
+   script, spanning the first screen edge to edge. Light-page take on the site's
+   dim strokes: arms a touch lighter than the diamonds. */
+.hero-lattice {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  overflow: clip;
+  pointer-events: none;
+}
+.hero-lattice-svg { position: absolute; overflow: visible; }
+.hero-lattice-svg path { stroke: var(--np-arm, #dedee1); stroke-linecap: round; stroke-linejoin: round; }
+.hero-lattice-svg .np-diamond { stroke: var(--np-dia, #c8c8cd); }
+/* over the nav: an ABSOLUTE layer at the top of the page, not fixed — fixed
+   promotes the mutating SVG to its own compositor layer and Chromium flickers it
+   (the NEIGHPalm site hit the same thing). At scroll 0 the two are identical. */
+.hero-lattice--fixed { position: absolute; top: 0; left: 0; width: 100%; height: 100svh; margin-left: 0; overflow: hidden; z-index: 20; }
+.hero-lattice--behind { z-index: -1; } /* kept on the page: under the text */
+/* harness pick mode: click a vector to delete it (shown faint red), click again to restore */
+.hero-lattice--pick { pointer-events: auto; z-index: 30; }
+.hero-lattice--pick .np-hit { stroke: transparent; stroke-width: 16; pointer-events: stroke; cursor: pointer; opacity: 0 !important; }
+.hero-lattice--pick .np-hover { stroke: #2f6bff; }
+/* pick mode: phase colours */
+.hero-lattice--pick path { stroke: #c9c9cc; }
+.hero-lattice--pick [data-phase="1"] { stroke: #e0302b; }
+.hero-lattice--pick [data-phase="2"] { stroke: #f08a00; }
+.hero-lattice--pick [data-phase="3"] { stroke: #c9a800; }
+.hero-lattice--pick [data-phase="4"] { stroke: #2aa64a; }
+.hero-lattice--pick [data-phase="5"] { stroke: #2f6bff; }
+.hero-lattice--pick [data-phase="6"] { stroke: #8a3ffc; }
+.hero-lattice--pick [data-phase="7"] { stroke: #d6409f; }
+.hero-lattice--pick [data-phase="8"] { stroke: #000000; }
 .hero-reveal.is-revealed > .hero-squares { display: none; } /* no hairline left at scale(0) */
 .seam--study .seam-rule { animation: none; }
 /* body copy reads like the home page blurbs; pictures sit between paragraphs */

@@ -10,9 +10,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=33">
+  <link rel="stylesheet" href="styles.css?v=42">
 </head>
-<body>
+<body class="nav-wait">
 
   <header class="nav">
     <a href="index.html" class="nav-link is-current">Work</a>
@@ -26,7 +26,7 @@
       <div class="hero-squares" aria-hidden="true"><i class="hero-sq hero-sq--left"></i><i class="hero-sq hero-sq--right"></i></div>
       <h1 class="project-title">Extremists on Both Sides</h1>
       <p class="project-blurb study-lede">An interactive exploration of political extremism in Israel, created in collaboration with The Seventh Eye, an investigative journal. Through data visualization, users define what they consider extreme and compare political actions across opposing camps.</p>
-      <p class="page-credit">Development began at Shenkar College of Design under the guidance of Mushon Zer-Aviv.</p>
+      <p class="page-credit">Interactive data visualization, developed under the guidance of Mushon Zer-Aviv.</p>
       <div class="seam seam--study">
         <span class="seam-rule"></span>
         <span class="seam-label">Case Study</span>
@@ -125,7 +125,8 @@
       var DELAY = 100, POP_IN = 325, HOLD = 650, POP_OUT = 215, BREAK = 100;
       var ease = function (t) { return -(Math.cos(Math.PI * t) - 1) / 2; };
       var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced) { head.classList.add('is-revealed'); return; }
+      var show = function () { head.classList.add('is-revealed'); document.body.classList.add('nav-in'); };
+      if (reduced) { show(); return; }
       var start, outAt = POP_IN + HOLD;
       function tick(now) {
         var el = now - start;
@@ -134,7 +135,7 @@
         var s = rout > 0 ? 1 - ease(rout) : ease(rin);
         for (var i = 0; i < sq.length; i++) sq[i].style.transform = 'scale(' + s + ')';
         if (rout < 1) requestAnimationFrame(tick);
-        else { sq.forEach(function (q) { q.style.display = 'none'; }); setTimeout(function () { head.classList.add('is-revealed'); }, BREAK); }
+        else { sq.forEach(function (q) { q.style.display = 'none'; }); setTimeout(show, BREAK); }
       }
       function begin() { start = performance.now() + DELAY; requestAnimationFrame(tick); }
       /* start on the first PAINTED frame: fonts and CSS can hold the first paint
