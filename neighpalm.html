@@ -4,13 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEIGHPalm - Eyal Raz</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Eyal Raz">
+  <meta property="og:title" content="NEIGHPalm - Eyal Raz">
+  <meta property="og:description" content="Website design and development for an AI-powered security and compliance platform, brought to life through a modular visual language.">
+  <meta property="og:url" content="https://eyalraz.com/neighpalm.html">
+  <meta property="og:image" content="https://eyalraz.com/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Josefin+Slab:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=42">
+  <link rel="stylesheet" href="styles.css?v=50">
 </head>
 <body class="nav-wait">
 
@@ -90,6 +99,36 @@
       <p>As the consulting company behind NEIGHPalm, NEIGH shares its visual language. For its landing page, I rotated the geometric motif by 45 degrees to convey order and a more traditional consulting approach while maintaining a clear connection between the two.</p>
       <div class="media-row"><img class="shot" src="images/neighpalm/np-25.jpg" alt="NEIGH: Security Leadership For Companies That Move Fast"></div>
       <div class="media-row"><img class="shot" src="images/neighpalm/np-23.jpg" alt="NEIGH: the two pillars and their goals"></div>
+    </section>
+
+    <!-- ── Before & after ───────────────────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">Early Draft Comparison</h2>
+      <p>Early drafts next to the finished screens. Drag the handle to&nbsp;compare.</p>
+      <div class="media-row">
+        <div class="shot compare" style="--pos: 50%">
+          <img class="compare-after" src="images/neighpalm/np-01.jpg" alt="The hero, final" loading="lazy">
+          <img class="compare-before" src="images/neighpalm/early-01.jpg" alt="The hero, early draft" loading="lazy">
+          <div class="compare-handle" aria-hidden="true"></div>
+          <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="The hero: drag to compare the early draft with the final">
+        </div>
+      </div>
+      <div class="media-row">
+        <div class="shot compare" style="--pos: 50%">
+          <img class="compare-after" src="images/neighpalm/np-02.jpg" alt="Layer one, final" loading="lazy">
+          <img class="compare-before" src="images/neighpalm/early-02.jpg" alt="Layer one, early draft" loading="lazy">
+          <div class="compare-handle" aria-hidden="true"></div>
+          <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Layer one: drag to compare the early draft with the final">
+        </div>
+      </div>
+      <div class="media-row">
+        <div class="shot compare" style="--pos: 50%">
+          <img class="compare-after" src="images/neighpalm/np-12.jpg" alt="The agents, final" loading="lazy">
+          <img class="compare-before" src="images/neighpalm/early-12.jpg" alt="The agents, early draft" loading="lazy">
+          <div class="compare-handle" aria-hidden="true"></div>
+          <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="The agents: drag to compare the early draft with the final">
+        </div>
+      </div>
     </section>
 
     <nav class="page-foot">
@@ -349,5 +388,14 @@
   <script src="_debug-inspect.js"></script>
   <script src="_debug-visual-edit.js"></script>
 
+  <script>
+    /* Before/after sliders: the range input lies invisibly over the picture and
+       drives --pos, which clips the draft layer and places the handle. */
+    document.querySelectorAll('.compare').forEach(function (box) {
+      var range = box.querySelector('.compare-range');
+      function set() { box.style.setProperty('--pos', range.value + '%'); }
+      range.addEventListener('input', set); set();
+    });
+  </script>
 </body>
 </html>

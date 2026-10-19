@@ -422,12 +422,24 @@ img.frame {
   width: calc(100% + 2 * var(--crop) + var(--crop-right));
   margin-right: calc(-1 * var(--crop) - var(--crop-right));
 }
-/* Let There Be Light hero: a longer hold on the last frame before the fade */
-.frame--ltbl-hero .fade-loop { --hold-loop: 1.6s; }
+/* Let There Be Light hero: a longer hold on the last frame, then instead of
+   dimming to the page it crossfades into its own first frame, which sits
+   underneath as a still (same crop as the video) */
+.frame--ltbl-hero { position: relative; }
+.frame--ltbl-hero .fade-loop { --hold-loop: 1.6s; position: relative; z-index: 1; }
+.frame--ltbl-hero .frame-first {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: calc(-1 * var(--crop)); /* a % margin measures against width on every side, like the video's; a % top would measure against height */
+  width: calc(100% + 2 * var(--crop));
+  height: auto;
+  aspect-ratio: 16 / 10; /* sized exactly like the video above it */
+  object-fit: cover;
+  display: block;
+}
 /* each clip is a link to the project's site. display:contents keeps the .frame
    itself as the flex item, so the row layout is untouched by the wrapper */
-.frame-link { display: contents; color: inherit; }
-.frame-link .frame { cursor: pointer; }
 /* cropped clips: the same slice trimmed off all four edges, as a share of the
    frame's width so it scales with the window (the house rule, 2026-10-10):
    0.76% = the 10px the user picked on a 1312px-wide full clip; 0.62% = 4px on a
@@ -745,6 +757,64 @@ video.shot--phone {
   aspect-ratio: 9 / 19.5;
 }
 
+/* ── before/after compare: draft on the left, final on the right ── */
+.compare {
+  position: relative;
+  aspect-ratio: var(--compare-ratio, 2400 / 1592);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.compare img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+}
+.compare-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.compare-handle::after {
+  content: '\2039\00a0\00a0\203A';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  font: 300 20px/40px 'Josefin Sans', sans-serif;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+.compare-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  touch-action: pan-y; /* a vertical swipe still scrolls the page on a phone */
+  -webkit-appearance: none;
+  appearance: none;
+}
+.compare-range::-webkit-slider-thumb { -webkit-appearance: none; width: 40px; height: 100%; }
+.compare-range::-moz-range-thumb { width: 40px; height: 100%; border: 0; }
+
 /* ── both-sides.html: an essay with pictures ─────────────── */
 /* images get the home page's frame: hairline border, 10px corners */
 .page--study .shot {
@@ -752,7 +822,10 @@ video.shot--phone {
   border-radius: 10px;
 }
 .page--study .shot--sketch { border-radius: 10px; }
-.page--np .shot { border: 0; } /* NEIGHPalm shots are dark on white: no hairline */
+.page--np .shot,
+.page--ltbl .shot { border: 0; } /* NEIGHPalm and LTBL shots are dark on white: no hairline */
+.page--bs { --compare-ratio: 2504 / 1554; }
+.page--np { --compare-ratio: 3316 / 2056; }
 /* the title block owns the first screen: centred in the viewport, the essay
    starts below the fold. 100svh = the small viewport height, so a phone's
    browser bars never push the credit line off screen. */
@@ -873,6 +946,11 @@ video.shot--phone {
   /* all three the same height: one phone-screen ratio, the odd capture trimmed to fit */
   aspect-ratio: 902 / 1634;
   object-fit: cover;
+}
+/* the LTBL walkthrough is a different shape: show it whole, nothing trimmed */
+.page--ltbl video.shot--phone {
+  aspect-ratio: auto;
+  object-fit: contain;
 }
 
 .page-foot {
