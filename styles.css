@@ -528,7 +528,7 @@ img.frame {
 
 /* the paragraphs fill the space between title and button, spreading evenly */
 .about-body {
-  max-width: 432px;
+  max-width: 372px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -540,7 +540,7 @@ img.frame {
   font-weight: 600;
   font-size: 38px;
   line-height: 1.1;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .about-text p {
@@ -549,7 +549,7 @@ img.frame {
 }
 
 .about-text p + p {
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 /* ── Contact ──────────────────────────────────────────── */
