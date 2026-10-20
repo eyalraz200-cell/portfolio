@@ -1,8 +1,13 @@
 # Resume source
 
-`cv.html` is the resume, styled like the site (Josefin Slab / Josefin Sans, black on white).
-Edit the text there, then rebuild `../resume.pdf`:
+`cv.html` is the resume, rebuilt from the Figma file "Eyal Raz - CV" (frame A4 - 2) at 1 Figma px = 1pt.
+Edit the text there, then rebuild `../resume.pdf` with Chromium via Playwright:
 
-    DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib python3 -m weasyprint resume-src/cv.html resume.pdf
+    python3 -c "
+    from playwright.sync_api import sync_playwright; import pathlib
+    with sync_playwright() as p:
+        b=p.chromium.launch(); pg=b.new_page()
+        pg.goto(pathlib.Path('resume-src/cv.html').resolve().as_uri())
+        pg.pdf(path='resume.pdf', prefer_css_page_size=True, print_background=True); b.close()"
 
-(WeasyPrint via `pip3 install weasyprint`, plus `brew install pango`.)
+(WeasyPrint ignores the variable-font weight range, so every weight renders the same; Chromium handles it.)
