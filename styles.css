@@ -612,16 +612,6 @@ img.frame {
   -webkit-text-stroke: 6.5px #000;
 }
 
-/* pinned to the bottom of the screen, like the "WORK" seam on the home page */
-.contact-caption {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 22px;
-  font-size: 20px;
-  color: #5c5c5c;
-}
-
 /* ── Project page ─────────────────────────────────────── */
 /* let-there-be-light.html etc. Same 8-of-12 column span the showcase media
    uses on the home page, same frame border/radius, same gap between clips. */
@@ -1153,12 +1143,6 @@ picture {
     -webkit-text-stroke: 4px #000;
   }
 
-  .contact-caption {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    font-size: 17px;
-  }
 }
 
 @media (max-width: 700px) {
