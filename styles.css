@@ -859,8 +859,15 @@ video.shot--phone {
    simply drawn. */
 /* the three lines on the first screen, tuned by eye 2026-10-17 */
 .page--study .page-head .project-title { font-weight: 200; }
-.page--study .page-head .study-lede { margin-top: 12px; max-width: 806px; font-size: 22px; } /* 806: the Both Sides lede holds at three lines */
+.page--study .page-head .study-lede { margin-top: 12px; max-width: 882px; font-size: 22px; } /* 882: the Both Sides lede holds at three lines */
 .page--study .page-credit { margin-top: 16px; max-width: 720px; margin-inline: auto; font-weight: 200; font-size: 16px; color: rgba(0, 0, 0, 0.5); }
+/* links under the credit (the article, a write-up): darker than the credit so
+   they read as clickable; "·" between them when there are two */
+.page--study .page-links { margin-top: 28px; font-weight: 300; font-size: 16px; color: rgba(0, 0, 0, 0.5); }
+/* the underline is a border, so it runs under the arrow icon as well */
+.page--study .page-links a { display: inline-flex; align-items: center; gap: 4px; border-bottom: 0.5px solid color-mix(in srgb, currentColor 35%, transparent); padding-bottom: 1px; transition: border-color 0.18s ease; }
+.page--study .page-links a:hover { border-color: currentColor; }
+.page--study .page-links .sep { margin: 0 10px; color: rgba(0, 0, 0, 0.4); }
 .page--study .seam--study { left: 0; right: 0; } /* beats the phone rule below */
 /* hero reveal: two camp squares (settlers orange, anti-reform blue — the
    project's own legend colours) pop in and out before the text fades in */
@@ -940,6 +947,7 @@ video.shot--phone {
   font-size: 20px;
   line-height: 1.5;
 }
+.prose p.one-line { max-width: 48ch; } /* a single short sentence: wide enough not to wrap */
 .prose p + p { margin-top: 1em; }
 .prose p strong { font-weight: 500; }
 .prose p a {
@@ -957,13 +965,8 @@ video.shot--phone {
    below them, before the next section's title */
 .prose .media-row--reveal { margin-top: 128px; }
 .page-section:has(.media-row--reveal) + .page-section { margin-top: 128px; }
-.prose .section-title { max-width: 24ch; margin-inline: auto; text-align: center; font-weight: 200; }
+.prose .section-title { max-width: 28ch; margin-inline: auto; text-align: center; font-weight: 200; }
 .study-lede { font-weight: 300; }
-/* a shot that holds a video: the box keeps the border and radius, the video
-   inside is what fades between loops (see the reveal script in both-sides.html) */
-.shot--video { overflow: hidden; background: #fff; }
-.shot--video video { display: block; width: 100%; height: auto; transition: opacity 0.6s ease; }
-.shot--video video.is-fading { opacity: 0; }
 /* the three phone screens share one row */
 .page--study .shot--phone {
   flex: 0 1 calc((100% - 2 * var(--clip-gap)) / 3);
@@ -1175,6 +1178,7 @@ picture {
   .page--study .page-head { margin-top: -100px; }
   .page--study .page-head .study-lede { font-size: 17px; margin-top: 16px; }
   .page--study .page-credit { font-size: 14px; margin-top: 10px; }
+  .page--study .page-links { font-size: 14px; margin-top: 8px; }
 }
 
 /* the hidden attribute always wins over a component display rule */
