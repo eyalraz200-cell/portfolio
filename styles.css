@@ -1165,6 +1165,10 @@ picture {
   .media-row {
     flex-wrap: wrap;
   }
+  /* shots never share a row on a phone: each takes the full width */
+  .media-row .shot:not(.shot--phone) {
+    flex-basis: 100%;
+  }
 
   .shot--phone,
   .page--study .shot--phone {
