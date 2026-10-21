@@ -718,6 +718,19 @@ img.frame {
   object-fit: contain;
 }
 
+/* a clip as tall as the window, centred on it, breaking out of the text
+   column; the row loses its height so the page flow stays right */
+.media-row--screen { justify-content: center; }
+.shot--screen {
+  flex: none;
+  width: auto;
+  max-width: 100vw; /* never wider than the window; contain keeps the aspect */
+  height: 100vh;
+}
+@media (max-width: 700px) {
+  .shot--screen { height: auto; width: 100%; }
+}
+
 /* phone screens: fixed share of the row, never stretched wide */
 .shot--phone {
   flex: 0 1 calc((100% - 3 * var(--clip-gap)) / 4);
