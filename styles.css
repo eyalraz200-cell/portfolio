@@ -193,6 +193,11 @@ a {
   to   { transform: scaleX(1); }
 }
 
+/* the seam rules are dotted, so they're uncovered in place (clip-path)
+   rather than scaled: the dots stay put and appear one by one */
+@keyframes seam-draw-left  { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+@keyframes seam-draw-right { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+
 /* one span per letter, laid out in full from the start and switched visible
    one at a time, so nothing re-centres while a word types in */
 .letter {
@@ -205,12 +210,10 @@ a {
   to   { visibility: visible; }
 }
 
-.seam-rule:first-child { transform-origin: 100% 50%; }
-.seam-rule:last-child  { transform-origin: 0 50%; }
-
 .seam-rule {
-  animation: rule-draw var(--rv-seam-dur) cubic-bezier(.2, .7, .2, 1) var(--rv-seam-at) both;
+  animation: seam-draw-left var(--rv-seam-dur) linear var(--rv-seam-at) both;
 }
+.seam-rule:last-child { animation-name: seam-draw-right; }
 
 /* rv-off: set by the script for one frame to restart the sequence. */
 html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-rule {
@@ -450,6 +453,9 @@ img.frame {
    every side, which is exactly what makes the trim equal top/bottom/left/right. */
 .frame--crop { --crop: 0.76%; }
 .frame--half.frame--crop { --crop: 0.62%; }
+/* the Both Sides pair: the recordings carry a margin of their own, so a hair more off */
+.frame--half.frame--crop:has(source[data-src*="web/timeline.mp4"]) { --crop: 0.75%; }
+.frame--half.frame--crop:has(source[data-src*="web/resize.mp4"]) { --crop: 0.7%; }
 .frame--crop video {
   display: block;
   height: auto;

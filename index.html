@@ -19,7 +19,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=52">
+  <link rel="stylesheet" href="styles.css?v=54">
 </head>
 <body>
 
@@ -56,8 +56,8 @@
         roleGap: 235,   // pause between the name and the role
         ruleAt: 575,    // rule starts sweeping, ms after the name starts
         ruleDur: 1450,  // rule sweep
-        seamGap: 0,     // pause after the centre is done, before the seam
-        seamDur: 2100,  // dotted rules grow out
+        seamGap: -450,  // seam starts this long BEFORE the centre is done (negative = overlap)
+        seamDur: 1650,  // dotted rules grow out
         workLetter: 100 // ms per letter for "Work"
       };
       var ORIG = {};
@@ -93,14 +93,13 @@
       }
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       run(TIMING);
-      /* scrolling away mid-reveal: every animation still pending or running
-         is sped up so it lands within RUSH ms from wherever it is now */
-      var RUSH = 300;
+      /* scrolling away mid-reveal: nothing is sped up or snapped — every
+         animation still waiting for its turn simply starts now, at its own
+         pace, so the hero is never left half-drawn */
       function finish() {
         document.querySelector(".hero").getAnimations({ subtree: true }).forEach(function (a) {
-          var t = a.effect.getComputedTiming();
-          var remaining = (t.delay + t.activeDuration) - (a.currentTime || 0);
-          if (remaining > RUSH) a.playbackRate = remaining / RUSH;
+          var delay = a.effect.getComputedTiming().delay;
+          if ((a.currentTime || 0) < delay) a.currentTime = delay;
         });
       }
       ['wheel', 'touchmove', 'scroll'].forEach(function (ev) {
@@ -136,10 +135,16 @@
             <source data-src="vids/web/reveal.mp4?v=t32">
           </video>
         </div>
-        <div class="frame frame--full frame--crop">
+        <div class="frame frame--half frame--crop">
           <video class="fade-loop" muted playsinline preload="metadata">
             <source data-src="vids/mobile/web/timeline.mp4" media="(max-width: 700px)">
             <source data-src="vids/web/timeline.mp4?v=new1">
+          </video>
+        </div>
+        <div class="frame frame--half frame--crop">
+          <video class="fade-loop" muted playsinline preload="metadata">
+            <source data-src="vids/mobile/web/resize.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/resize.mp4?v=t105">
           </video>
         </div>
         <div class="frame frame--full frame--crop">
@@ -166,13 +171,13 @@
             <source data-src="vids/neighpalm/np-hero.mp4?v=4k31">
           </video>
         </div>
-        <div class="frame frame--full frame--crop frame--np-layers"><!-- house crop plus a sliver more off the right (styles.css) -->
+        <div class="frame frame--half frame--crop frame--np-layers"><!-- house crop plus a sliver more off the right (styles.css) -->
           <video class="fade-loop" muted playsinline preload="metadata">
             <source data-src="vids/mobile/neighpalm/np-layers.mp4" media="(max-width: 700px)">
             <source data-src="vids/neighpalm/np-layers.mp4?v=4k31">
           </video>
         </div>
-        <div class="frame frame--full frame--crop frame--np-s3"><!-- house crop plus a sliver more off the right (styles.css) -->
+        <div class="frame frame--half frame--crop frame--np-s3"><!-- house crop plus a sliver more off the right (styles.css) -->
           <video class="fade-loop" muted playsinline preload="metadata">
             <source data-src="vids/mobile/neighpalm/np-s3.mp4" media="(max-width: 700px)">
             <source data-src="vids/neighpalm/np-s3.mp4?v=4k31">
@@ -197,16 +202,22 @@
             <source data-src="vids/web/ltbl-hero.mp4?v=2592">
           </video>
         </div>
-        <div class="frame frame--full frame--crop"><!-- ping-pong: the file holds forward + reverse, so a plain loop runs back and forth -->
+        <div class="frame frame--half frame--crop"><!-- ping-pong: the file holds forward + reverse, so a plain loop runs back and forth -->
           <video muted loop playsinline preload="metadata">
             <source data-src="vids/mobile/web/ltbl-1.mp4" media="(max-width: 700px)">
             <source data-src="vids/web/ltbl-1.mp4?v=pp2592">
           </video>
         </div>
-        <div class="frame frame--full frame--crop">
+        <div class="frame frame--half frame--crop">
           <video muted loop playsinline preload="metadata">
             <source data-src="vids/mobile/web/ltbl-2.mp4" media="(max-width: 700px)">
             <source data-src="vids/web/ltbl-2.mp4?v=2592">
+          </video>
+        </div>
+        <div class="frame frame--full frame--crop">
+          <video muted loop playsinline preload="metadata">
+            <source data-src="vids/mobile/web/ltbl-3.mp4" media="(max-width: 700px)">
+            <source data-src="vids/web/ltbl-3.mp4?v=2592">
           </video>
         </div>
       </div>
