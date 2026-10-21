@@ -965,6 +965,7 @@ video.shot--phone {
    below them, before the next section's title */
 .prose .media-row--reveal { margin-top: 128px; }
 .page-section:has(.media-row--reveal) + .page-section { margin-top: 128px; }
+.prose .media-row--reveal + .media-row--reveal-pair { margin-top: var(--clip-gap); }
 .prose .section-title { max-width: 28ch; margin-inline: auto; text-align: center; font-weight: 200; }
 .study-lede { font-weight: 300; }
 /* the three phone screens share one row */
