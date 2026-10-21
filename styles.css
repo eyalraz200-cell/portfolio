@@ -789,6 +789,7 @@ video.shot--phone {
   aspect-ratio: var(--compare-ratio, 2400 / 1592);
   user-select: none;
   -webkit-user-select: none;
+  touch-action: pan-y; /* a sideways finger drives the handle, an up-down one scrolls */
 }
 .compare img {
   position: absolute;
@@ -1188,7 +1189,7 @@ picture {
   .page--study .page-head { margin-top: -100px; }
   .page--study .page-head .study-lede { font-size: 17px; margin-top: 16px; }
   .page--study .page-credit { font-size: 14px; margin-top: 10px; }
-  .page--study .page-links { font-size: 14px; margin-top: 8px; }
+  .page--study .page-links { font-size: 14px; margin-top: 18px; }
 }
 
 /* the hidden attribute always wins over a component display rule */

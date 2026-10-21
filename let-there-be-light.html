@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=73">
+  <link rel="stylesheet" href="styles.css?v=74">
 </head>
 <body class="nav-wait">
 
@@ -168,6 +168,22 @@
       var range = box.querySelector('.compare-range');
       function set() { box.style.setProperty('--pos', range.value + '%'); }
       range.addEventListener('input', set); set();
+      /* phones: iOS only drags a range input from its thumb, so a finger
+         landing anywhere else does nothing. Track the finger ourselves. */
+      var dragging = false;
+      function at(e) {
+        var r = box.getBoundingClientRect();
+        var v = Math.max(0, Math.min(100, (e.clientX - r.left) / r.width * 100));
+        range.value = v; set();
+      }
+      box.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'mouse') return;
+        dragging = true; at(e); e.preventDefault();
+      });
+      box.addEventListener('pointermove', function (e) { if (dragging) at(e); });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
+        box.addEventListener(ev, function () { dragging = false; });
+      });
     });
   </script>
 
