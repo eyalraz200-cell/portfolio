@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>/* local only: lets me select text while working; the live site keeps it off */if(/^(localhost|127\.|192\.168\.|10\.|$)/.test(location.hostname))document.documentElement.classList.add("dev");</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Extremists on Both Sides - Eyal Raz</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Eyal Raz">
   <meta property="og:title" content="Extremists on Both Sides - Eyal Raz">
-  <meta property="og:description" content="An interactive exploration of political extremism in Israel, created in collaboration with The Seventh Eye, an investigative journal. Through data visualization, users define what they consider extreme and compare political actions across opposing camps.">
+  <meta property="og:description" content="An interactive exploration of political extremism in Israel, created in collaboration with The Seventh Eye, an investigative journal. Through data visualization, users can compare extreme political actions across the two opposing camps.">
   <meta property="og:url" content="https://eyalraz.com/both-sides.html">
   <meta property="og:image" content="https://eyalraz.com/images/og.png">
   <meta property="og:image:width" content="1200">
@@ -19,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=54">
+  <link rel="stylesheet" href="styles.css?v=60">
 </head>
 <body class="nav-wait">
 
@@ -34,7 +35,7 @@
     <header class="page-head hero-reveal">
       <div class="hero-squares" aria-hidden="true"><i class="hero-sq hero-sq--left"></i><i class="hero-sq hero-sq--right"></i></div>
       <h1 class="project-title">Extremists on Both Sides</h1>
-      <p class="project-blurb study-lede">An interactive exploration of political extremism in Israel, created in collaboration with The Seventh Eye, an investigative journal. Through data visualization, users define what they consider extreme and compare political actions across opposing camps.</p>
+      <p class="project-blurb study-lede">An interactive exploration of political extremism in Israel, created in collaboration with The Seventh Eye, an investigative journal. Through data visualization, users can compare extreme political actions across the two opposing camps.</p>
       <p class="page-credit">Interactive data visualization, developed under the guidance of Mushon Zer-Aviv.</p>
       <div class="seam seam--study">
         <span class="seam-rule"></span>
@@ -49,9 +50,20 @@
       <p>There are many ways to compare political extremism: by focusing on politicians or citizens, or by examining statements, actions, goals, or media coverage. Working through these possibilities, I defined a goal and a method:</p>
       <p><strong>Goal:</strong> To examine whether the symmetry attributed to Israel&rsquo;s political camps reflects reality.</p>
       <p><strong>Method:</strong> To compare extreme political actions by the two camps and use data to show the differences that emerge.</p>
-      <div class="media-row"><img class="shot" src="images/both-sides/d01.png" alt="Opening screen: the title beside a column of colored squares"></div>
-      <div class="media-row"><img class="shot" src="images/both-sides/d01-en.png" alt="The opening screen in English"></div>
-      <div class="media-row"><img class="shot" src="images/both-sides/d01-ar.png" alt="The opening screen in Arabic"></div>
+      <div class="media-row media-row--reveal">
+        <div class="shot shot--video"><video class="reveal-lang" data-lang="en" muted playsinline autoplay preload="auto" aria-label="The opening reveal in English">
+          <source src="vids/mobile/web/both-sides/reveal-en.mp4?v=s3" media="(max-width: 700px)">
+          <source src="vids/web/both-sides/reveal-en.mp4?v=s3">
+        </video></div>
+        <div class="shot shot--video"><video class="reveal-lang" data-lang="he" muted playsinline autoplay preload="auto" aria-label="The opening reveal in Hebrew">
+          <source src="vids/mobile/web/both-sides/reveal-he.mp4?v=s3" media="(max-width: 700px)">
+          <source src="vids/web/both-sides/reveal-he.mp4?v=s3">
+        </video></div>
+        <div class="shot shot--video"><video class="reveal-lang" data-lang="ar" muted playsinline autoplay preload="auto" aria-label="The opening reveal in Arabic">
+          <source src="vids/mobile/web/both-sides/reveal-ar.mp4?v=s3" media="(max-width: 700px)">
+          <source src="vids/web/both-sides/reveal-ar.mp4?v=s3">
+        </video></div>
+      </div>
     </section>
 
     <!-- ── Title & camps ──────────────────────────────────────── -->
@@ -68,7 +80,7 @@
     </section>
 
     <!-- ── Timeline ───────────────────────────────────────────── -->
-    <section class="page-section prose">
+    <section class="page-section prose" id="patterns">
       <h2 class="section-title">Patterns of Action</h2>
       <p>At the first visual high point, political actions take shape along a timeline, each represented by a square in the color of the group responsible. I chose to begin in early 2023, with the start of the protests against Yariv Levin&rsquo;s judicial overhaul&mdash;the point when the portrayal of groups within the Change Bloc as extremists became more widespread. Milestones marked along the timeline help explain increases and decreases in the activity of the camps and groups.</p>
       <div class="media-row"><img class="shot" src="images/both-sides/d05.png" alt="The timeline begins in early 2023"></div>
@@ -86,16 +98,21 @@
     </section>
 
     <!-- ── Comparison ─────────────────────────────────────────── -->
-    <section class="page-section prose">
+    <section class="page-section prose" id="graph">
       <h2 class="section-title">What Do You Consider Extreme?</h2>
       <p>In the comparison stage, users are asked to drag the types of actions they consider extreme to the center of the screen. The options range from nonviolent demonstrations to pogroms, with no visual hierarchy or order suggesting how severe they are. The decision about which actions are extreme remains with the user. I chose this interaction so that users would examine Israeli society through their own values, rather than have mine imposed on them&mdash;and confront the implications of applying their choices to both camps.</p>
       <div class="media-row"><img class="shot" src="images/both-sides/d11.png" alt="The comparison stage before any choice"></div>
       <p>With each type of action selected, the squares representing the relevant events float up from the bottom of the screen and form two columns, one for each camp. When actions such as assaults and pogroms are selected, the gap grows before your eyes: thousands of squares on the right, compared with tens or hundreds on the left. This is the project&rsquo;s visual and conceptual climax: users see what happens when their own definition of extremism is applied equally to both camps.</p>
       <div class="media-row"><img class="shot" src="images/both-sides/d12.png" alt="One action type selected: squares rise into two columns"></div>
       <p>Looking more closely at individual events, the violent descriptions stand in tension with the sterile white background and neatly arranged squares. What looks from a distance like just another unit in a chart reveals itself up close as a real event in which people caused or suffered harm.</p>
-      <div class="media-row"><img class="shot" src="images/both-sides/d13.png" alt="An event card opened from a square in the column"></div>
-      <div class="media-row"><img class="shot" src="images/both-sides/d15.png" alt="Most action types selected: thousands of squares on one side"></div>
-      <div class="media-row"><img class="shot" src="images/both-sides/d16.png" alt="A different selection of actions, a different pair of columns"></div>
+      <div class="media-row">
+        <img class="shot" src="images/both-sides/d13.png" alt="An event card opened from a square in the column">
+        <img class="shot" src="images/both-sides/d14.png" alt="Another event card: a different action, a different date">
+      </div>
+      <div class="media-row">
+        <img class="shot" src="images/both-sides/d15.png" alt="Most action types selected: thousands of squares on one side">
+        <img class="shot" src="images/both-sides/d16.png" alt="A different selection of actions, a different pair of columns">
+      </div>
       <div class="media-row"><img class="shot shot--sketch" src="images/both-sides/18-sketch.jpg?v=2" alt="Hand sketch of the comparison: two clusters of dots either side of a dashed line"></div>
     </section>
 
@@ -190,6 +207,53 @@
   <script>window.HARNESS_SERVER = "http://192.168.0.136:8090";</script>
   <script src="_debug-bus.js"></script>
   <script src="_debug-inspect.js"></script>
+  <script>
+    /* Opening reveal, three languages: the clips run in lockstep. At the lead
+       clip's last frame all three pause, hold, fade the PICTURE out (the bordered
+       box stays), rewind while invisible, and fade back in together once every
+       clip has actually painted its first frame again. */
+    (function () {
+      var vids = Array.prototype.slice.call(document.querySelectorAll('video.reveal-lang'));
+      if (!vids.length || window.__revealTuning) return;
+      var HOLD = 1400, FADE = 600, busy = false;
+      function all(fn) { vids.forEach(fn); }
+      function painted(v, cb) {
+        if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(function () { cb(); });
+        else requestAnimationFrame(function () { requestAnimationFrame(cb); });
+      }
+      /* rewind all three while invisible; once every one has seeked, start
+         them together and reveal each as soon as it has painted a frame. A
+         paused video never reports a painted frame, so play comes first. */
+      function restart() {
+        var left = vids.length;
+        all(function (v) {
+          v.addEventListener('seeked', function done() {
+            v.removeEventListener('seeked', done);
+            if (--left) return;
+            busy = false;
+            all(function (w) {
+              w.play().catch(function () {});
+              painted(w, function () { w.classList.remove('is-fading'); });
+            });
+          });
+          v.currentTime = 0;
+        });
+      }
+      var lead = vids[0];
+      function atEnd() {
+        if (busy || !lead.duration || lead.currentTime < lead.duration - 0.08) return;
+        busy = true;
+        all(function (v) { v.pause(); });
+        setTimeout(function () {
+          all(function (v) { v.classList.add('is-fading'); });
+          setTimeout(restart, FADE);
+        }, HOLD);
+      }
+      lead.addEventListener('timeupdate', atEnd);
+      lead.addEventListener('ended', atEnd);
+      all(function (v) { v.play().catch(function () {}); });
+    })();
+  </script>
   <script>
     /* Before/after sliders: the range input lies invisibly over the picture and
        drives --pos, which clips the draft layer and places the handle. */

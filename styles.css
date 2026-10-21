@@ -16,9 +16,15 @@ body {
   color: #000;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 300;
-  /* no text highlighting: the site reads as a designed piece, not a document */
+  /* no text highlighting: the site reads as a designed piece, not a document.
+     Lifted on localhost (html.dev, set by the one-liner in each page's head). */
   -webkit-user-select: none;
   user-select: none;
+}
+
+html.dev body {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 h1,
@@ -853,7 +859,7 @@ video.shot--phone {
    simply drawn. */
 /* the three lines on the first screen, tuned by eye 2026-10-17 */
 .page--study .page-head .project-title { font-weight: 200; }
-.page--study .page-head .study-lede { margin-top: 12px; max-width: 790px; font-size: 22px; }
+.page--study .page-head .study-lede { margin-top: 12px; max-width: 806px; font-size: 22px; } /* 806: the Both Sides lede holds at three lines */
 .page--study .page-credit { margin-top: 16px; max-width: 720px; margin-inline: auto; font-weight: 200; font-size: 16px; color: rgba(0, 0, 0, 0.5); }
 .page--study .seam--study { left: 0; right: 0; } /* beats the phone rule below */
 /* hero reveal: two camp squares (settlers orange, anti-reform blue — the
@@ -947,8 +953,17 @@ video.shot--phone {
 .prose .media-row + .media-row { margin-top: var(--clip-gap); } /* stacked pictures: clip gap, as on the home page */
 .prose .media-row + p { margin-top: 40px; }
 .prose .media-row + .caption--hint { margin-top: 12px; }
+/* the three opening-reveal clips on Both Sides: the same air above them as
+   below them, before the next section's title */
+.prose .media-row--reveal { margin-top: 128px; }
+.page-section:has(.media-row--reveal) + .page-section { margin-top: 128px; }
 .prose .section-title { max-width: 24ch; margin-inline: auto; text-align: center; font-weight: 200; }
 .study-lede { font-weight: 300; }
+/* a shot that holds a video: the box keeps the border and radius, the video
+   inside is what fades between loops (see the reveal script in both-sides.html) */
+.shot--video { overflow: hidden; background: #fff; }
+.shot--video video { display: block; width: 100%; height: auto; transition: opacity 0.6s ease; }
+.shot--video video.is-fading { opacity: 0; }
 /* the three phone screens share one row */
 .page--study .shot--phone {
   flex: 0 1 calc((100% - 2 * var(--clip-gap)) / 3);
