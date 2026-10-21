@@ -104,6 +104,11 @@ a {
   /* svh = the viewport with mobile browser chrome showing, so the seam
      isn't pushed under the address bar on a phone */
   min-height: 100svh;
+  /* --vvh: the height the phone ACTUALLY shows, measured by the script in
+     index.html. Some browsers (in-app ones, Safari with its bar expanded on a
+     first visit) report a taller svh than they paint, and the seam lands under
+     the bottom bar until a refresh. */
+  min-height: var(--vvh, 100svh);
   display: flex;
   align-items: center;
   justify-content: center;

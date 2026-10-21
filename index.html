@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=71">
+  <link rel="stylesheet" href="styles.css?v=72">
 </head>
 <body>
 
@@ -270,6 +270,19 @@
     // Always open at the top, and scroll without leaving a #hash in the URL —
     // otherwise a refresh jumps back to wherever you last clicked.
     history.scrollRestoration = 'manual';
+    // The visible height, as the phone really paints it (see .hero in
+    // styles.css). Re-measured whenever the browser's bars come or go.
+    (function () {
+      var r = document.documentElement.style;
+      function measure() {
+        var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+        if (h) r.setProperty('--vvh', Math.round(h) + 'px');
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', measure);
+      window.addEventListener('load', measure);
+    })();
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }
