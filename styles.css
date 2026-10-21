@@ -300,7 +300,8 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
   line-height: 1.5;
 }
 
-.project-blurb a {
+.project-blurb a,
+.about-body a {
   text-decoration: underline;
   text-underline-offset: 0.2em;
   text-decoration-thickness: 0.5px;
@@ -308,7 +309,8 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
   transition: text-decoration-color 0.18s ease;
 }
 
-.project-blurb a:hover {
+.project-blurb a:hover,
+.about-body a:hover {
   text-decoration-color: currentColor;
 }
 
