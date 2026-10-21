@@ -718,17 +718,18 @@ img.frame {
   object-fit: contain;
 }
 
-/* a clip as tall as the window, centred on it, breaking out of the text
-   column; the row loses its height so the page flow stays right */
+/* a clip as wide as the window (minus the page's side margin), centred,
+   breaking out of the text column; capped so it fits under the fixed nav */
 .media-row--screen { justify-content: center; }
 .shot--screen {
   flex: none;
-  width: auto;
-  max-width: 100vw; /* never wider than the window; contain keeps the aspect */
-  height: 100vh;
+  width: calc(100vw - 2 * var(--grid-margin));
+  max-width: none;
+  height: auto;
+  max-height: calc(100vh - 90px); /* the nav: 34px + 16px padding around one line */
 }
 @media (max-width: 700px) {
-  .shot--screen { height: auto; width: 100%; }
+  .shot--screen { width: 100%; max-height: none; }
 }
 
 /* phone screens: fixed share of the row, never stretched wide */
