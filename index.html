@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=74">
+  <link rel="stylesheet" href="styles.css?v=77">
 </head>
 <body>
 
@@ -34,7 +34,7 @@
   <section class="hero">
     <div class="nameplate">
       <h1 class="nameplate-name">Eyal Raz</h1>
-      <p class="nameplate-role">Web Designer</p>
+      <p class="nameplate-role">Digital Designer</p>
     </div>
 
     <div class="seam">
@@ -369,7 +369,7 @@
   </script>
 
   <!-- SCAFFOLDING — delete these tags and the _debug-* files when done. -->
-  <script>window.HARNESS_SERVER = "http://localhost:8090";</script>
+  <script>window.HARNESS_SERVER = location.port === "8090" ? "" : "http://localhost:8090";</script>
   <script src="_debug-bus.js"></script>
   <script src="_debug-inspect.js"></script>
   <script src="_debug-grid.js"></script>
