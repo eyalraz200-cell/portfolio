@@ -451,6 +451,13 @@ img.frame {
 .frame--third { width: calc((100% - 2 * var(--clip-gap)) / 3); } /* three phone clips across (Rudiment) */
 .frame--third video { display: block; width: 100%; height: auto; }
 .project-media--plain .frame--line { border: 0.5px solid rgba(0, 0, 0, 0.25); } /* a white clip on the white page keeps its hairline even in a plain card */
+/* the Rudiment clips are phone-shaped (498x1080), not 16:10, and each fades to ITS OWN
+   screen colour, not the page: the wrapper's background is what shows through the fade */
+.frame--third.frame--crop { --crop: 0.62%; }
+.frame--third.frame--crop video { aspect-ratio: 498 / 1080; }
+.frame--rud-home { background: #fbf7ff; }
+.frame--rud-exercise { background: #0f0136; }
+.frame--rud-streak { background: #fbc321; }
 /* a lone half clip sits flush with the media block's right edge instead of centred */
 .frame--right { margin-left: auto; }
 /* a 16:10 desktop clip and an uncropped phone clip (780x1688) on one row at the same
@@ -471,7 +478,7 @@ img.frame {
 .frame--poster-tall video { aspect-ratio: 7 / 10; }
 /* a portrait poster is capped to the screen height and centred, so it is never
    taller than what you can see at once */
-.frame--poster-tall { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.7)); margin-inline: auto; }
+.frame--poster-tall { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.645)); margin-inline: auto; } /* was 0.7; nudged down 2026-10-24 */
 .frame--poster-tall video { width: 100%; height: auto; }
 .frame--poster .fade-loop { --hold-loop: 2s; }
 .frame--poster-live .fade-loop { --hold-loop: 2s; }   /* hold counts from the end of the entrance (data-loop-at in index.html) */
@@ -1236,6 +1243,8 @@ picture > source {
   .page--study .shot--phone {
     flex: 0 1 calc((100% - var(--clip-gap)) / 2);
   }
+  /* the Rudiment recordings stay three across on a phone, as on the home page */
+  .page--rud .shot--clip { flex: 0 1 calc((100% - 2 * var(--clip-gap)) / 3); }
 
   .prose p { font-size: 18px; }
   .page--study .shot { border-radius: 8px; }
@@ -1254,14 +1263,21 @@ picture > source {
 }
 
 /* ── rudiment.html: the drummers' practice app ───────────── */
+/* the three screen recordings: the wrapper is the frame (hairline, corners, clipping)
+   and the video inside is scaled up by the house half-clip crop (0.62% a side), so the
+   trim comes off the recording's own edge and never off the frame. 498x1080 = the clip */
+.page--rud .shot--clip { aspect-ratio: 498 / 1080; overflow: hidden; --crop: 0.62%; }
+.page--rud .shot--clip video { display: block; width: calc(100% + 2 * var(--crop)); height: auto; margin: calc(-1 * var(--crop)); }
 /* mockups carry their own background (studio grey, the snare): no hairline */
 .page--rud .shot--bare { border: 0; }
 /* the drum-set avatars: four to a row, on the page with no frame */
 .page--rud .kit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--clip-gap); align-items: center; justify-items: center; }
-/* every kit was drawn at one scale (the bass drum is the same size in each file), so each
-   image takes a share of its cell proportional to its own pixel width (--w, inline):
-   the widest kit (1845px) fills 80% of the cell and the rest scale down with it */
-.page--rud .shot--kit { width: calc(var(--w, 1845) / 1845 * 80%); border: 0; border-radius: 0; }
+/* every kit was drawn at one scale (the bass drum head is 234px across in each file), so
+   each cell is one 1845x1236 canvas at 80% of the column, and the image sits in it at its
+   own pixel size (--w) shifted so its bass drum centre (--cx, --cy) lands on one point */
+.page--rud .kit { position: relative; width: 80%; aspect-ratio: 1845 / 1236; }
+.page--rud .shot--kit { position: absolute; width: calc(var(--w) / 1845 * 100%); height: auto; border: 0; border-radius: 0;
+  left: calc((966 - var(--cx)) / 1845 * 100%); top: calc((828 - var(--cy)) / 1236 * 100%); }
 /* process: sketch → wireframe → final, an arrow between each step */
 .page--rud .process-row { align-items: center; gap: 12px; }
 .page--rud .process-row .shot { flex: 1 1 0; }
@@ -1274,6 +1290,10 @@ picture > source {
   .page--rud .process-arrow { display: none; }
   .page--rud .process-row .shot { flex-basis: auto; }
 }
+
+/* a finished project held back from the live site: shown on the dev server only (html.dev) */
+.project--held { display: none; }
+html.dev .project--held { display: flex; } /* .project is a centred flex column; block would drop it to the left */
 
 /* the hidden attribute always wins over a component display rule */
 [hidden] {

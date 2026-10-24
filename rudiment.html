@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>/* local only: lets me select text while working; the live site keeps it off */if(/^(localhost|127\.|192\.168\.|10\.|$)/.test(location.hostname))document.documentElement.classList.add("dev");</script>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex"><!-- held back: not linked from the site yet -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rudiment - Eyal Raz</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Eyal Raz">
+  <meta property="og:title" content="Rudiment - Eyal Raz">
+  <meta property="og:description" content="A practice companion app for drummers: structured routines, progress tracking and gamified practice.">
+  <meta property="og:url" content="https://eyalraz.com/rudiment.html">
+  <meta property="og:image" content="https://eyalraz.com/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&family=Josefin+Slab:wght@100..700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css?v=106">
+  <script src="nav.js" defer></script>
+</head>
+<body>
+
+  <header class="nav">
+    <a href="index.html" class="nav-link is-current">Work</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </header>
+
+  <main class="page page--study page--rud">
+
+    <header class="page-head">
+      <h1 class="project-title">Rudiment</h1>
+      <p class="project-blurb study-lede">A practice companion for drummers who struggle to stay consistent or want a more structured routine. It builds discipline, tracks progress, and encourages focused practice through gamification elements that make routine training engaging and rewarding.</p>
+      <p class="page-credit">Developed as a school project guided by Aviran Revach.</p>
+      <div class="seam seam--study">
+        <span class="seam-rule"></span>
+        <span class="seam-label">Case Study</span>
+        <span class="seam-rule"></span>
+      </div>
+    </header>
+
+    <!-- ── Main screens ─────────────────────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">Main Screens</h2>
+      <div class="media-row"><img class="shot shot--bare" src="images/rudiment/hero.jpg" alt="The Rudiment home screen on a phone, lying on a snare drum"></div>
+      <div class="media-row media-row--center">
+        <div class="shot shot--phone shot--clip"><video src="vids/web/rudiment/home.mp4" autoplay muted loop playsinline preload="metadata" aria-label="The home screen: the drum set avatar, streak and the daily practice routine"></video></div>
+        <div class="shot shot--phone shot--clip"><video src="vids/web/rudiment/exercise.mp4" autoplay muted loop playsinline preload="metadata" aria-label="An exercise: the notation and the metronome"></video></div>
+        <div class="shot shot--phone shot--clip"><video src="vids/web/rudiment/streak.mp4" autoplay muted loop playsinline preload="metadata" aria-label="The streak screen after a session"></video></div>
+      </div>
+      <div class="media-row"><img class="shot shot--bare" src="images/rudiment/mock-phone.jpg" alt="The home screen on a phone" loading="lazy"></div>
+      <div class="media-row"><img class="shot shot--bare" src="images/rudiment/mock-landscape.jpg" alt="An exercise in landscape, the phone turned on its side" loading="lazy"></div>
+      <div class="media-row"><img class="shot shot--bare" src="images/rudiment/mock-tablet.jpg" alt="The exercise list on a tablet" loading="lazy"></div>
+    </section>
+
+    <!-- ── Drum set avatar ──────────────────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">Drum Set Avatar</h2>
+      <p>Customizable drum sets that visually represent user progression.</p>
+      <div class="media-row kit-grid">
+        <div class="kit" style="--w: 1655; --cx: 930; --cy: 714"><img class="shot shot--kit" src="images/rudiment/kit-1.png" alt="Drum set avatar, purple and yellow" loading="lazy"></div>
+        <div class="kit" style="--w: 1701; --cx: 966; --cy: 714"><img class="shot shot--kit" src="images/rudiment/kit-2.png" alt="Drum set avatar, black and white" loading="lazy"></div>
+        <div class="kit" style="--w: 1701; --cx: 966; --cy: 714"><img class="shot shot--kit" src="images/rudiment/kit-3.png" alt="Drum set avatar, yellow" loading="lazy"></div>
+        <div class="kit" style="--w: 1845; --cx: 966; --cy: 828"><img class="shot shot--kit" src="images/rudiment/kit-4.png" alt="Drum set avatar, green and teal" loading="lazy"></div>
+        <div class="kit" style="--w: 1845; --cx: 966; --cy: 828"><img class="shot shot--kit" src="images/rudiment/kit-5.png" alt="Drum set avatar, yellow sparkle" loading="lazy"></div>
+        <div class="kit" style="--w: 1701; --cx: 966; --cy: 828"><img class="shot shot--kit" src="images/rudiment/kit-6.png" alt="Drum set avatar, red" loading="lazy"></div>
+        <div class="kit" style="--w: 1039; --cx: 304; --cy: 390"><img class="shot shot--kit" src="images/rudiment/kit-7.png" alt="Drum set avatar, a single drum" loading="lazy"></div>
+        <div class="kit" style="--w: 1279; --cx: 554; --cy: 714"><img class="shot shot--kit" src="images/rudiment/kit-8.png" alt="Drum set avatar, small kit" loading="lazy"></div>
+      </div>
+    </section>
+
+    <!-- ── Process ──────────────────────────────────────────── -->
+    <section class="page-section prose">
+      <h2 class="section-title">Process</h2>
+      <p>From paper sketch to wireframe to the finished screen: the home screen and the exercise screen.</p>
+      <div class="media-row process-row">
+        <img class="shot" src="images/rudiment/process-1.jpg" alt="Home screen, paper sketch" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-2.jpg" alt="Home screen, first wireframe" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-3.jpg" alt="Home screen, refined wireframe" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-4.jpg" alt="Home screen, greyscale layout" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-5.jpg" alt="Home screen, final" loading="lazy">
+      </div>
+      <div class="media-row process-row">
+        <img class="shot" src="images/rudiment/process-6.jpg" alt="Exercise screen, paper sketch" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-7.jpg" alt="Exercise screen, first wireframe" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-8.jpg" alt="Exercise screen, refined wireframe" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-9.jpg" alt="Exercise screen, greyscale layout" loading="lazy">
+        <span class="process-arrow" aria-hidden="true"></span>
+        <img class="shot" src="images/rudiment/process-10.jpg" alt="Exercise screen, final" loading="lazy">
+      </div>
+    </section>
+
+    <nav class="page-foot">
+      <a href="index.html" class="button">&larr; All work</a>
+    </nav>
+
+  </main>
+
+</body>
+</html>
