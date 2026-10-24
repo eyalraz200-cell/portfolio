@@ -448,6 +448,9 @@ img.frame {
 .frame--full { width: 100%; }
 .frame--half { width: calc((100% - var(--clip-gap)) / 2); }
 .frame--quarter { width: calc(var(--col) * 2 + 1 * var(--grid-gutter)); }
+.frame--third { width: calc((100% - 2 * var(--clip-gap)) / 3); } /* three phone clips across (Rudiment) */
+.frame--third video { display: block; width: 100%; height: auto; }
+.project-media--plain .frame--line { border: 0.5px solid rgba(0, 0, 0, 0.25); } /* a white clip on the white page keeps its hairline even in a plain card */
 /* a lone half clip sits flush with the media block's right edge instead of centred */
 .frame--right { margin-left: auto; }
 /* a 16:10 desktop clip and an uncropped phone clip (780x1688) on one row at the same
@@ -468,8 +471,8 @@ img.frame {
 .frame--poster-tall video { aspect-ratio: 7 / 10; }
 /* a portrait poster is capped to the screen height and centred, so it is never
    taller than what you can see at once */
-.frame--poster-tall { width: auto; max-width: 100%; margin-inline: auto; }
-.frame--poster-tall video { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.7)); height: auto; }
+.frame--poster-tall { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.7)); margin-inline: auto; }
+.frame--poster-tall video { width: 100%; height: auto; }
 .frame--poster .fade-loop { --hold-loop: 2s; }
 .frame--poster-live .fade-loop { --hold-loop: 2s; }   /* hold counts from the end of the entrance (data-loop-at in index.html) */
 
@@ -1177,6 +1180,7 @@ picture > source {
     margin-inline: 0;
   }
   .frame--np-layer3 { height: auto; aspect-ratio: 1784 / 1706; }
+  .frame--third { width: calc((100% - 2 * var(--clip-gap)) / 3); }
 
   /* about */
   /* one centred column, as wide as the photo, so the text's left and right
@@ -1247,6 +1251,28 @@ picture > source {
   .page--study .page-head .study-lede { font-size: 17px; margin-top: 16px; }
   .page--study .page-credit { font-size: 14px; margin-top: 10px; }
   .page--study .page-links { font-size: 14px; margin-top: 18px; }
+}
+
+/* ── rudiment.html: the drummers' practice app ───────────── */
+/* mockups carry their own background (studio grey, the snare): no hairline */
+.page--rud .shot--bare { border: 0; }
+/* the drum-set avatars: four to a row, on the page with no frame */
+.page--rud .kit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--clip-gap); align-items: center; justify-items: center; }
+/* every kit was drawn at one scale (the bass drum is the same size in each file), so each
+   image takes a share of its cell proportional to its own pixel width (--w, inline):
+   the widest kit (1845px) fills 80% of the cell and the rest scale down with it */
+.page--rud .shot--kit { width: calc(var(--w, 1845) / 1845 * 80%); border: 0; border-radius: 0; }
+/* process: sketch → wireframe → final, an arrow between each step */
+.page--rud .process-row { align-items: center; gap: 12px; }
+.page--rud .process-row .shot { flex: 1 1 0; }
+.page--rud .process-arrow { flex: none; width: 14px; height: 14px; opacity: 0.45;
+  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h16M13 5l7 7-7 7'/%3E%3C/svg%3E"); }
+@media (max-width: 700px) {
+  .page--rud .kit-grid { grid-template-columns: repeat(2, 1fr); }
+  /* the five steps wrap into a 3 + 2 grid; the arrows go */
+  .page--rud .process-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--clip-gap); }
+  .page--rud .process-arrow { display: none; }
+  .page--rud .process-row .shot { flex-basis: auto; }
 }
 
 /* the hidden attribute always wins over a component display rule */
