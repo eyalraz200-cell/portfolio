@@ -478,7 +478,7 @@ img.frame {
 .frame--poster-tall video { aspect-ratio: 7 / 10; }
 /* a portrait poster is capped to the screen height and centred, so it is never
    taller than what you can see at once */
-.frame--poster-tall { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.645)); margin-inline: auto; } /* was 0.7; nudged down 2026-10-24 */
+.frame--poster-tall { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.7)); margin-inline: auto; }
 .frame--poster-tall video { width: 100%; height: auto; }
 .frame--poster .fade-loop { --hold-loop: 2s; }
 .frame--poster-live .fade-loop { --hold-loop: 2s; }   /* hold counts from the end of the entrance (data-loop-at in index.html) */
