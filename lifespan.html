@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lifespan of Mesopotamian Gods by Cultural Origin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Serif+4:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper: #fff9ee; --ink: #000; --rule: #7a766a; --t: .7s; }
+    html, body { margin: 0; height: 100%; background: #2a2724; overflow: hidden; }
+
+    /* The poster is laid out on a fixed 4000x2800 canvas (the Figma frame) and fitted inside the screen. */
+    .board { position: fixed; inset: 0; }
+    .canvas { position: absolute; left: 0; top: 0; width: 4000px; height: 2800px; transform-origin: 0 0; background: var(--paper); overflow: hidden; }
+    .canvas::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 5; opacity: .09; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .canvas > *, #legend > * { position: absolute; }
+    .canvas svg.chart { left: 0; top: 0; width: 4000px; height: 2800px; overflow: visible; }
+
+    /* ---------- type ---------- */
+    .title { left: 554px; top: 115px; width: 2893px; margin: 0; font: 700 100px/normal 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .26em; text-align: center; color: var(--ink); }
+    .subtitle { left: 0; top: 513px; width: 4000px; margin: 0; font: 500 48px/normal 'Cormorant Garamond', serif; letter-spacing: .19em; text-align: center; color: var(--ink); white-space: nowrap; }
+    .axis-t { margin: 0; font: 400 40px/1.2 'Cormorant Garamond', serif; color: rgba(0,0,0,.6); white-space: nowrap; }
+    .axis-t.y { width: 90px; text-align: right; }
+    .axis-t.x { width: 200px; margin-left: -100px; text-align: center; }
+    .axis-name { left: 246px; top: 957px; width: 283px; margin: 0; font: 400 40px/1.2 'Cormorant Garamond', serif; color: #686661; }
+    .event { margin: 0; width: 420px; margin-left: -210px; font: 300 25px/1.05 'Source Serif 4', serif; color: rgba(0,0,0,.8); text-align: center; white-space: pre-line; }
+    .note { margin: 0; color: var(--ink); opacity: .7; }
+    .note h3 { margin: 0 0 10px; font: 600 25px/1.15 'Source Serif 4', serif; white-space: nowrap; }
+    .note h3 b { font-weight: 500; margin-right: 16px; }
+    .note p { margin: 0; font: 300 19px/1.32 'Source Serif 4', serif; }
+    .portrait { display: block; filter: grayscale(1); }   /* the Figma layers are desaturated; some source images are colour */
+    .legend-h { left: 1700px; top: 2466px; width: 600px; margin: 0; font: 500 48px/1 'Source Serif 4', serif; color: rgba(0,0,0,.6); text-align: center; }
+    .legend-l { margin: 0 0 0 -150px; width: 300px; font: 400 36px/1 'Source Serif 4', serif; color: rgba(0,0,0,.6); text-align: center; white-space: nowrap; }
+    .legend-item { cursor: pointer; }
+    .legend-line { height: 3px; width: 110px; opacity: .6; }
+
+    /* ---------- rules ---------- */
+    .rule { background: var(--rule); height: 3px; }
+    .rule--head, .ornament { opacity: .5; }
+    .diamond { fill: #4f4b43; } .diamond--small { fill: var(--rule); }
+    .axis { stroke: #d5cdc0; stroke-width: 2; fill: none; }
+    .ev-line { stroke: #9f9688; stroke-width: 2; stroke-dasharray: 4 4; fill: none; }
+    .callout { fill: none; stroke: var(--rule); stroke-width: 3; opacity: .3; }
+    .dot { stroke: var(--paper); stroke-width: 7; }
+
+    /* ---------- arcs ---------- */
+    .arc { fill: none; stroke-width: 3; }
+    .origin { opacity: .6; }
+    body[data-filter] .origin:not([data-match]) { opacity: .08; }
+    .origin { transition: opacity .3s ease; }
+
+    /* ---------- reveal: every element starts hidden and gets `.in` + --d / --t from play() ---------- */
+    .fade { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); }
+    .fade.in { opacity: 1; }
+    .title { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); } .title.in { opacity: .72; }
+    .subtitle { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); } .subtitle.in { opacity: 1; }
+    .rule--head { transform: scaleX(0); transition: transform var(--t) cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    .rule--head.l { transform-origin: right; } .rule--head.r { transform-origin: left; } .rule--head.in { transform: scaleX(1); }
+    .ornament { transform: scale(0); transform-origin: center; transition: transform var(--t) cubic-bezier(.2,.8,.2,1.4); transition-delay: var(--d, 0s); } .ornament.in { transform: scale(1); }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t) cubic-bezier(.4,0,.2,1); transition-delay: var(--d, 0s); } .draw.in { stroke-dashoffset: 0; }
+    .dot { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform var(--t) cubic-bezier(.2,.8,.2,1.4); transition-delay: var(--d, 0s); } .dot.in { transform: scale(1); }
+    .legend-line { transform: scaleX(0); transform-origin: left; transition: transform var(--t) ease; transition-delay: var(--d, 0s); } .legend-line.in { transform: scaleX(1); }
+    [data-el="legend"] { transform: none !important; transition: opacity var(--t) ease !important; transition-delay: var(--d, 0s) !important; opacity: 0; }
+    [data-el="legend"].in { opacity: 1; } .legend-line[data-el="legend"].in { opacity: .6; }
+    /* ---- compare/: how an arc arrives (html[data-arc]) ---- */
+    .arc { transition-delay: var(--d, 0s); }
+    [data-arc="draw"] .arc { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t) cubic-bezier(.4,0,.2,1); transition-delay: var(--d, 0s); }
+    [data-arc="draw"] .arc.in { stroke-dashoffset: 0; }
+    [data-arc="rise"] .arc { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); transition: transform var(--t) cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    [data-arc="rise"] .arc.in { transform: scaleY(1); }
+    [data-arc="fade"] .arc { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); }
+    [data-arc="fade"] .arc.in { opacity: 1; }
+    [data-arc="both"] .arc { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); stroke-dasharray: 1; stroke-dashoffset: 1; transition: transform var(--t) cubic-bezier(.2,.7,.2,1), stroke-dashoffset var(--t) cubic-bezier(.4,0,.2,1); transition-delay: var(--d, 0s); }
+    [data-arc="both"] .arc.in { transform: scaleY(1); stroke-dashoffset: 0; }
+
+    .no-anim * { transition: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .canvas * { transition: none !important; transform: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+      .title { opacity: .72 !important; } .callout { opacity: .3 !important; } .note { opacity: .7 !important; } .origin { opacity: .6 !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="board" id="board">
+  <div class="canvas" id="canvas">
+
+    <h1 class="title" data-el="title">Lifespan of Mesopotamian Gods by Cultural Origin</h1>
+    <div class="rule rule--head l" data-el="rule" style="left:423px;top:440px;width:1548px"></div>
+    <div class="rule rule--head r" data-el="rule" style="left:2035px;top:440px;width:1543px"></div>
+    <svg class="ornament" data-el="ornament" style="left:1951px;top:429px" width="100" height="24" viewBox="0 0 100 24" aria-hidden="true">
+      <path class="diamond--small" d="M17.4 6.6 34.8 12.5 17.4 18.4 0 12.5Z"/><path class="diamond" d="M50 0 67.4 11.8 50 23.7 32.6 11.8Z"/><path class="diamond--small" d="M82.6 6.6 100 12.5 82.6 18.4 65.2 12.5Z"/>
+    </svg>
+    <p class="subtitle" data-el="subtitle">When gods first appeared and how long they endured across different cultures</p>
+
+    <!-- y axis -->
+    <p class="axis-name fade" data-el="axis">Duration of worship (years)</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1104px">3,500</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1234px">3,000</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1368px">2,500</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1499px">2,000</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1631px">1,500</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1763px">1,000</p>
+    <p class="axis-t y fade" data-el="axis" style="left:236px;top:1894px">500</p>
+    <!-- x axis labels -->
+    <p class="axis-t x fade" data-el="axis" style="left:417px;top:2078px">3500 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:813px;top:2078px">3000 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:1211px;top:2078px">2500 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:1607px;top:2078px">2000 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:2004px;top:2078px">1500 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:2400px;top:2078px">1000 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:2797px;top:2078px">500 BCE</p>
+    <p class="axis-t x fade" data-el="axis" style="left:3194px;top:2078px">0</p>
+    <p class="axis-t x fade" data-el="axis" style="left:3591px;top:2078px">500 CE</p>
+
+    <!-- historical events -->
+    <p class="event fade" data-el="event" style="left:417px;top:2206px">3500 BCE
+First large scale cities</p>
+    <p class="event fade" data-el="event" style="left:1097px;top:2206px">2600 BCE
+Great Pyramid of Giza built</p>
+    <p class="event fade" data-el="event" style="left:1779px;top:2206px">1800 BCE
+Early Israelite traditions</p>
+    <p class="event fade" data-el="event" style="left:2572px;top:2206px">800 BCE
+Greek city-states emerge</p>
+    <p class="event fade" data-el="event" style="left:3194px;top:2206px">1st century CE
+Christianity begins</p>
+    <p class="event fade" data-el="event" style="left:3682px;top:2206px">622 CE
+Rise of Islam</p>
+
+    <!-- notes + portraits -->
+    <img class="portrait fade" data-el="portrait" src="images/gods/nammu.png" alt="Statue of Nammu" style="left:721px;top:869px;width:161px;height:256px">
+    <div class="note fade" data-el="note" style="left:903px;top:942px;width:294px"><h3>Nammu - 3500 BCE</h3><p>One of the earliest recorded deities, Nammu represents primordial creation, appearing before structured pantheons and reflecting the earliest stages of religious thought.</p></div>
+    <img class="portrait fade" data-el="portrait" src="images/gods/anu.png" alt="Relief of Anu" style="left:1319px;top:686px;width:161px;height:256px">
+    <div class="note fade" data-el="note" style="left:1504px;top:731px;width:294px"><h3>Anu - 3400 BCE</h3><p>Among the longest-lasting deities (~3600 years), Anu appears at the very beginning of Mesopotamian religion. Despite this span, he remained a distant sky authority, rarely the focus of direct worship.</p></div>
+    <div class="note fade" data-el="note" style="left:2602px;top:804px;width:306px"><h3>Enki - 3200 BCE</h3><p>A god of wisdom and water who endures across the entire timeline. Unlike many deities of power, Enki is known for outsmarting chaos - often saving humanity through clever intervention rather than force.</p></div>
+    <div class="note fade" data-el="note" style="left:3214px;top:901px;width:312px"><h3><b>1</b>Marduk  1900 BCE</h3><p>A relatively late-emerging deity, Marduk rises rapidly to dominance during the Old Babylonian period. His elevation reflects Babylon’s political power, eventually positioning him as the central god of a reorganized pantheon, absorbing roles once held by earlier deities.</p></div>
+    <img class="portrait fade" data-el="portrait" src="images/gods/marduk.png" alt="Relief of Marduk" style="left:3546px;top:893px;width:196px;height:300px">
+    <div class="note fade" data-el="note" style="left:3430px;top:1512px;width:312px"><h3><b>2</b>Teshub - 1600 BCE</h3><p>A Hurrian storm god who rises with the Hittite world. His myths center on battles for control, but unlike earlier gods, his worship remains tied to specific kingdoms and fades with them.</p></div>
+
+    <!-- legend -->
+    <div class="rule fade" data-el="legend" style="left:235px;top:2398px;width:3530px;background:rgba(122,118,106,.5)"></div>
+    <p class="legend-h fade" data-el="legend">Place of origin</p>
+    <div id="legend"></div>
+
+    <svg class="chart" id="chart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4000 2800">
+      <!-- axes -->
+      <path class="axis draw" data-el="axis" pathLength="1" d="M338 2051H3749"/>
+      <g class="axis draw" data-el="axis" pathLength="1"><path pathLength="1" d="M417 2051v21M814 2051v21M1211 2051v21M1607 2051v21M2004 2051v21M2400 2051v21M2797 2051v21M3194 2051v21M3591 2051v21"/></g>
+      <path class="axis draw" data-el="axis" pathLength="1" style="stroke:#c7bdb0" d="M338 1919.5h27M338 1788.5h27M338 1656.5h27M338 1524.5h27M338 1393.5h27M338 1259.5h27M338 1129.5h27"/>
+      <!-- event ticks -->
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M417 2142v37"/>
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M1097 2051v128"/>
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M1779 2051v122"/>
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M2572 2051v122"/>
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M3194 2138v37"/>
+      <path class="ev-line draw" data-el="event" pathLength="1" d="M3682 2051v122"/>
+      <g id="arcs"></g>
+      <!-- anchor dots + numbers -->
+      <circle class="dot" data-el="dot" cx="1538.5" cy="1198.5" r="5.5" fill="#b23a2a"/>
+      <circle class="dot" data-el="dot" cx="1864.5" cy="1106.5" r="5.5" fill="#b23a2a"/>
+      <circle class="dot" data-el="dot" cx="2246.5" cy="1122.5" r="5.5" fill="#b23a2a"/>
+      <circle class="dot" data-el="dot" cx="2513.5" cy="1475.5" r="5.5" fill="#82b793"/>
+      <circle class="dot" data-el="dot" cx="2258.5" cy="1814.5" r="5.5" fill="#a09880"/>
+      <text class="fade" data-el="dot" x="2513.5" y="1462" text-anchor="middle" font-family="Source Serif 4" font-weight="500" font-size="25" fill="rgba(122,118,106,.6)">1</text>
+      <text class="fade" data-el="dot" x="2258.5" y="1800" text-anchor="middle" font-family="Source Serif 4" font-weight="500" font-size="25" fill="rgba(122,118,106,.6)">2</text>
+      <!-- callouts: drawn from the dot outward to the note -->
+      <path class="callout draw" data-el="callout" pathLength="1" d="M1526 1186.5 1492 1152.5H705"/>
+      <path class="callout draw" data-el="callout" pathLength="1" d="M1858 1087 1817 966.5H1303"/>
+      <path class="callout draw" data-el="callout" pathLength="1" d="M2256 1096.5 2281.3 1035.5H2901"/>
+    </svg>
+
+  </div>
+</div>
+
+<script>
+(() => {
+  const ORIGINS = [
+    ['sumerian', 'Sumerian', '#b23a2a', 1136.5], ['babylonian', 'Babylonian', '#2e8b57', 1382], ['semitic', 'Semitic', '#4545de', 1610],
+    ['akkadian', 'Akkadian', '#d643c0', 1824], ['assyrian', 'Assyrian', '#c9a227', 2047.5], ['hurrian', 'Hurrian', '#584d29', 2260],
+    ['elamite', 'Elamite', '#27aed4', 2465], ['southarabian', 'South Arabian', '#740090', 2718],
+  ];
+  // Each arc: x, y, w, h of its box (from Figma) — the arch is a symmetric cubic from the
+  // bottom-left corner to the bottom-right, control points a third of the height above the top.
+  const ARCS = {
+    sumerian: [[395,1184.9,2617.7,866],[1188.3,1289.8,2300.4,761.1],[1267.6,1526,1586.5,524.9],[1267.6,1526,1586.5,524.9],[1267.6,1526,1586.5,524.9],[474.4,1106.1,2855.7,944.8],[633,1106.1,2855.7,944.8],[633,1106.1,2855.7,944.8],[633,1132.4,2776.4,918.5],[633,1158.6,2697,892.3],[712.3,1184.9,2617.7,866],[712.3,1184.9,2617.7,866],[950.3,1211,2538.4,839.8],[1109,1211,2538.4,839.8],[950.3,1263.6,2379.7,787.2],[1109,1316.1,2221.1,734.8],[1109,1316.1,2221.1,734.8],[871,1421,1903.8,629.8],[1029.6,1473.5,1745.1,577.4],[1029.6,1867.2,555.3,183.7],[1029.6,1867.2,555.3,183.7],[1505.6,1945.9,317.3,104.9]],
+    southarabian: [[2536.8,1762.2,872.6,288.6]],
+    assyrian: [[1267.6,1582.2,1416.7,468.7],[2457.5,1762.2,872.6,288.6],[2060.9,1844,625.1,206.8]],
+    akkadian: [[1743.6,1526,1586.5,524.9],[1346.9,1709.6,1031.2,341.2]],
+    elamite: [[1188.3,1562.8,1475.4,488.1],[1584.9,1694,1078.8,356.8]],
+    hurrian: [[1902.2,1814.7,713.9,236.2],[1981.5,1840.9,634.6,210],[2060.9,1867.2,555.3,183.7]],
+    babylonian: [[1664.2,1499.8,1665.8,551.1],[1188.3,1342.3,2141.8,708.6],[1584.9,1473.5,1745.1,577.4],[1584.9,1506.3,1645.9,544.5],[1584.9,1604.7,1348.5,446.1],[1743.6,1631,1269.2,419.9],[1584.9,1631,1269.2,419.9],[1743.6,1657.2,1189.9,393.7],[1743.6,1683.5,1110.5,367.4],[1743.6,1709.6,1031.2,341.2]],
+    semitic: [[1188.3,1447.3,1824.5,603.5],[1267.6,1499.8,1665.8,551.1]],
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (t, a) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
+  const layer = document.getElementById('arcs');
+  // arcs sorted by start year (left to right) so the stagger sweeps across the timeline
+  const all = [];
+  ORIGINS.forEach(([id, , c]) => (ARCS[id] || []).forEach(b => all.push({ id, c, b })));
+  all.sort((a, b) => a.b[0] - b.b[0]);
+  const groups = {};
+  ORIGINS.forEach(([id, label, c]) => { const g = el('g', { class: 'origin', 'data-origin': id }); groups[id] = g; layer.append(g); });
+  all.forEach(({ id, c, b }, i) => {
+    const [x, y, w, h] = b;
+    const p = el('path', { class: 'arc', 'data-el': 'arc', pathLength: 1, stroke: c, d: `M${x} ${y + h}C${x + w / 3} ${y - h / 3} ${x + 2 * w / 3} ${y - h / 3} ${x + w} ${y + h}` });
+    p.style.setProperty('--i', i);
+    groups[id].append(p);
+  });
+
+  // legend
+  const lg = document.getElementById('legend');
+  ORIGINS.forEach(([id, label, c, x]) => {
+    const line = document.createElement('div'); line.className = 'legend-line legend-item'; line.dataset.el = 'legend'; line.dataset.filter = id; line.style.cssText = `left:${x}px;top:2590px;background:${c}`;
+    const t = document.createElement('p'); t.className = 'legend-l legend-item'; t.dataset.el = 'legend'; t.dataset.filter = id; t.style.cssText = `left:${x + 55}px;top:2628px`; t.textContent = label;
+    lg.append(line, t);
+  });
+
+  // ---- scale the 4000px canvas to the board ----
+  const board = document.getElementById('board'), canvas = document.getElementById('canvas');
+  const fit = () => {
+    const k = Math.min(board.clientWidth / 4000, board.clientHeight / 2800);
+    canvas.style.transform = `scale(${k.toFixed(5)})`;
+    canvas.style.left = ((board.clientWidth - 4000 * k) / 2).toFixed(1) + 'px';
+    canvas.style.top = ((board.clientHeight - 2800 * k) / 2).toFixed(1) + 'px';
+  };
+  new ResizeObserver(fit).observe(board); fit();
+
+  // ---- the entrance: one timed sequence, ordered by ELEMENT TYPE ----
+  const ALL = [...document.querySelectorAll('[data-el]')];
+  const SEQ = {
+    labels: { title: 'title', ornament: 'ornament', rule: 'head rules', subtitle: 'subtitle', axis: 'axes', arc: 'arcs', dot: 'dots + numbers', callout: 'callout lines', note: 'notes', portrait: 'portraits', event: 'historical events', legend: 'legend' },
+    step: { title: 1, ornament: 2, rule: 2, subtitle: 2, axis: 3, arc: 4, dot: 4, event: 5, callout: 6, note: 6, portrait: 6, legend: 7 },
+    gap: 0.05,        // default s between one step finishing and the next starting
+    gaps: { 1: 0, 3: 0, 4: 0, 6: 0.5 },
+    overlap: 0.5,     // 0 = a step waits for the previous to finish; 0.5 = it starts when the previous is half done
+    dur: { title: 0.6, ornament: 0.5, rule: 0.6, subtitle: 0.7, axis: 0.8, arc: 1.2, dot: 0.8, callout: 0.5, note: 0.7, portrait: 0.7, event: 0.7, legend: 0.7 },
+    itemLag: 0.06,    // s between items of the same type (notes, events…)
+    arcLag: 0.07,     // s between one arc and the next
+    arc: 'draw',      // how an arc arrives: 'draw' | 'rise' | 'fade' | 'both' | 'none'
+  };
+  const count = t => ALL.filter(n => n.dataset.el === t).length;
+  const NOLAG = { legend: 1, axis: 1 };   // types whose items all arrive together
+  const span = t => (count(t) - 1) * (t === 'arc' ? SEQ.arcLag : NOLAG[t] ? 0 : SEQ.itemLag) + SEQ.dur[t];
+  const play = () => {
+    document.documentElement.dataset.arc = SEQ.arc;
+    const steps = [...new Set(Object.values(SEQ.step))].sort((a, b) => a - b);
+    const start = {}; let t = 0;
+    steps.forEach(st => { const types = Object.keys(SEQ.step).filter(k => SEQ.step[k] === st); types.forEach(k => start[k] = t); t += Math.max(...types.map(span)) * (1 - SEQ.overlap) + (SEQ.gaps[st] ?? SEQ.gap); });
+    const idx = {};
+    ALL.forEach(n => {
+      const ty = n.dataset.el, i = (idx[ty] = (idx[ty] || 0)); idx[ty]++;
+      const d = start[ty] + i * (ty === 'arc' ? SEQ.arcLag : NOLAG[ty] ? 0 : SEQ.itemLag);
+      n.style.setProperty('--d', d.toFixed(3) + 's');
+      n.style.setProperty('--t', SEQ.dur[ty] + 's');
+    });
+    document.documentElement.classList.add('no-anim');
+    ALL.forEach(n => n.classList.remove('in'));
+    void document.body.offsetWidth;
+    requestAnimationFrame(() => { document.documentElement.classList.remove('no-anim'); void document.body.offsetWidth;
+      requestAnimationFrame(() => ALL.forEach(n => n.classList.add('in'))); });
+    return t;
+  };
+  window.GODS = { SEQ, play, ALL };
+  play();
+
+  // ---- legend filter: hover previews, click pins ----
+  let pinned = null;
+  const set = f => { if (f) document.body.dataset.filter = f; else delete document.body.dataset.filter;
+    document.querySelectorAll('.origin').forEach(g => { if (f && g.dataset.origin === f) g.dataset.match = ''; else delete g.dataset.match; }); };
+  document.querySelectorAll('.legend-item').forEach(li => {
+    li.addEventListener('mouseenter', () => set(li.dataset.filter));
+    li.addEventListener('mouseleave', () => set(pinned));
+    li.addEventListener('click', () => { pinned = pinned === li.dataset.filter ? null : li.dataset.filter; set(pinned); });
+  });
+})();
+</script>
+<script src="_debug-bus.js"></script>
+<script src="_debug-inspect.js"></script>
+<script src="_debug-lifespan.js"></script>
+</body>
+</html>

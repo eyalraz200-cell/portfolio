@@ -16,11 +16,12 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Josefin+Slab:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&family=Josefin+Slab:wght@100..700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=77">
+  <link rel="stylesheet" href="styles.css?v=103">
+  <script src="nav.js" defer></script>
 </head>
 <body>
 
@@ -231,39 +232,34 @@
       </div>
     </div>
 
-    <!-- Habiluim and Pantheon — hidden for now, restore by uncommenting
     <div class="project">
-      <h2 class="project-title">Habiluim</h2>
-      <p class="project-blurb">Album redesign of &ldquo;Bereavement and Failure&rdquo; by the Israeli band Habiluim</p>
-      <div class="project-actions">
-        <a href="https://www.eyalraz.com/habiluim" class="button" hidden>View Case Study</a>
-      </div>
-
-      <div class="project-media">
-        <video class="frame frame--full" muted loop playsinline preload="metadata">
-          <source data-src="vids/mobile/web/hab-lettering.mp4" media="(max-width: 700px)">
-          <source data-src="vids/web/hab-lettering.mp4">
-        </video>
-        <img class="frame frame--half" src="images/hab-cover.jpg" alt="Album cover">
-        <img class="frame frame--half" src="images/hab-back.jpg" alt="Album back cover">
-        <img class="frame frame--full" src="images/hab-spread.png" alt="Booklet spread">
-      </div>
-    </div>
-
-    <div class="project">
-      <h2 class="project-title">Pantheon</h2>
-      <p class="project-blurb">An infographic poster series charting the gods of Mesopotamia: how long they were worshipped, where they lived in society, and the forms they took</p>
+      <h2 class="project-title">Mesopotamian Gods</h2>
+      <p class="project-blurb">A series of animated data visualisations exploring Mesopotamian gods: their origins, duration of worship, roles in society, and physical forms.</p>
       <div class="project-actions">
         <a href="#" class="button" hidden>View Case Study</a>
       </div>
 
       <div class="project-media">
-        <picture><source srcset="images/mobile/gods-lifespan.jpg" media="(max-width: 700px)"><img class="frame frame--full" src="images/gods-lifespan.png" alt="Lifespan of Mesopotamian gods by cultural origin"></picture>
-        <picture><source srcset="images/mobile/gods-poster-1.jpg" media="(max-width: 700px)"><img class="frame frame--half" src="images/gods-poster-1.png" alt="Mesopotamian gods across social contexts"></picture>
-        <picture><source srcset="images/mobile/gods-poster-2.jpg" media="(max-width: 700px)"><img class="frame frame--half" src="images/gods-poster-2.png" alt="Physical manifestations of Mesopotamian gods"></picture>
+        <div class="frame frame--full frame--bare frame--poster frame--poster-tall frame--poster-live"><!-- the poster draws itself in and its rings keep turning; the loop's hold counts from the END OF THE ENTRANCE (data-loop-at, seconds), not the end of the file -->
+          <video class="fade-loop" data-loop-at="6.62" muted playsinline preload="metadata">
+            <source data-src="vids/mobile/gods/social.mp4" media="(max-width: 700px)">
+            <source data-src="vids/gods/social.mp4">
+          </video>
+        </div>
+        <div class="frame frame--full frame--bare frame--poster">
+          <video class="fade-loop" muted playsinline preload="metadata">
+            <source data-src="vids/mobile/gods/lifespan.mp4" media="(max-width: 700px)">
+            <source data-src="vids/gods/lifespan.mp4">
+          </video>
+        </div>
+        <div class="frame frame--full frame--bare frame--poster frame--poster-tall">
+          <video class="fade-loop" muted playsinline preload="metadata">
+            <source data-src="vids/mobile/gods/manifest.mp4" media="(max-width: 700px)">
+            <source data-src="vids/gods/manifest.mp4">
+          </video>
+        </div>
       </div>
     </div>
-    -->
   </section>
 
   <script>
@@ -355,11 +351,18 @@
       function secs(name) { return parseFloat(getComputedStyle(v).getPropertyValue(name)) || 0; }
       // each step waits until the clip is on screen (see the observer above)
       function step(fn) { if (v.dataset.off) v._whenBack = fn; else fn(); }
+      // a clip with data-loop-at fades `hold` seconds after THAT point instead of
+      // waiting for the file to end (its tail is just the finished poster moving)
+      var loopAt = parseFloat(v.dataset.loopAt), armedLoop = false;
+      if (loopAt) v.addEventListener('timeupdate', function () {
+        if (!armedLoop && v.currentTime >= loopAt + secs('--hold-loop')) { armedLoop = true; v.dispatchEvent(new Event('ended')); }
+      });
       v.addEventListener('ended', function () {
+        if (loopAt && v.currentTime < loopAt) return;   // a real end before the entrance finished: ignore
         setTimeout(function () { step(function () {
           v.classList.add('is-fading');
           setTimeout(function () { step(function () {
-            v.currentTime = 0;
+            v.currentTime = 0; armedLoop = false;
             v.play();
             requestAnimationFrame(function () { v.classList.remove('is-fading'); });
           }); }, secs('--fade-loop') * 1000);

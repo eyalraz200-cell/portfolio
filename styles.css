@@ -51,7 +51,12 @@ a {
 .nav {
   position: fixed;
   top: 0;
-  padding: 34px 0 16px;
+  /* the fill's bottom edge IS the current link's underline: at rest it sits
+     right on it (--ul-rest: the underline's offset below the line box, measured
+     by nav.js), and once scrolled both land on the 12px edge together */
+  --nav-pad-scrolled: 12px;
+  --ul-rest: 2px;
+  padding: 34px 0 var(--ul-rest);
   background: #fff;
   left: 0;
   right: 0;
@@ -60,17 +65,42 @@ a {
   justify-content: center;
   gap: 40px;
   font-size: 16px;
+  transition: padding 0.58s ease;
+}
+
+/* scrolled (nav.js): the top padding drops to match the bottom, so the stuck
+   bar sits evenly around the links instead of carrying the hero's headroom.
+   The bottom loses the underline's 0.25em (4px at 16px) too: it is undrawn
+   while scrolled, so the padding measures from the letters, not from it */
+.nav.is-scrolled {
+  padding-top: 16px;
+  padding-bottom: var(--nav-pad-scrolled);
+}
+
+/* scrolled: hover is a weight change, not an underline */
+.nav.is-scrolled .nav-link:hover { font-weight: 400; }
+.nav.is-scrolled .nav-link:not(.is-current):hover::after { transform: scaleX(0); }
+
+/* scrolled: the current link's underline becomes the bar's hairline — it
+   slides down to the bar's bottom edge, stretches to the full width and fades
+   to 12%. --ul-dx / --ul-dy / --ul-sx are measured by nav.js. */
+.nav.is-scrolled .nav-link.is-current::after {
+  transform: translate(var(--ul-dx, 0px), calc(var(--nav-pad-scrolled) - var(--ul-rest))) scaleX(var(--ul-sx, 1));
+  height: 0.5px;
+  opacity: 0.12;
 }
 
 .nav-link {
   font-weight: 300;
   position: relative;
   text-decoration: none;
+  transition: font-weight 0.2s ease; /* smooth: the font is loaded as a variable range */
 }
 
 /* the underline is a drawn hairline, not the browser's: a native 0.5px
    underline gets rounded up to a whole pixel, this stays half a pixel.
-   It is always there, just invisible until hover — so nothing shifts. */
+   It is always there, drawn in from the left on hover (scaled to nothing
+   until then) — so nothing shifts. */
 .nav-link::after {
   content: "";
   position: absolute;
@@ -79,12 +109,13 @@ a {
   bottom: -0.25em;
   height: 0.5px;
   background: currentColor;
-  opacity: 0;
-  transition: opacity 0.18s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease, opacity 0.4s ease-out; /* the fade leads the move; thickness snaps */
 }
 
-.nav-link:hover::after {
-  opacity: 1;
+.nav .nav-link:hover::after { /* always drawn on hover, scrolled or not */
+  transform: scaleX(1);
 }
 
 .nav-link.is-current {
@@ -92,8 +123,9 @@ a {
 }
 
 .nav-link.is-current::after {
-  opacity: 1;
+  transform: scaleX(1);
   height: 1px;
+  transition-duration: 0.58s; /* the move to the hairline runs with the padding */
 }
 
 /* ── Hero ─────────────────────────────────────────────── */
@@ -397,6 +429,11 @@ html.rv-off .nameplate, html.rv-off .nameplate-role::before, html.rv-off .seam-r
 .project-media--plain .frame {
   border: 0;
 }
+/* the hairline only separates a white shot from the white page: a shot with its
+   own background (grey, a wall, cream paper) carries its edge and gets none */
+.frame--bare {
+  border: 0;
+}
 
 video.frame,
 img.frame {
@@ -424,6 +461,18 @@ img.frame {
   width: calc((100% - var(--clip-gap)) * 0.42);
   height: calc((100cqw - var(--clip-gap)) * 0.58 * 0.625);
 }
+/* Pantheon posters: each clip is the poster animating in on its own paper, so no
+   hairline; it holds the finished poster for a while before the loop fades it */
+.frame--poster { background: #fff9ee; }   /* the loop fades to the poster's own paper, not the page */
+.frame--poster video { display: block; width: 100%; height: auto; aspect-ratio: 10 / 7; }
+.frame--poster-tall video { aspect-ratio: 7 / 10; }
+/* a portrait poster is capped to the screen height and centred, so it is never
+   taller than what you can see at once */
+.frame--poster-tall { width: auto; max-width: 100%; margin-inline: auto; }
+.frame--poster-tall video { width: min(100%, calc((100vh - 2 * var(--grid-margin)) * 0.7)); height: auto; }
+.frame--poster .fade-loop { --hold-loop: 2s; }
+.frame--poster-live .fade-loop { --hold-loop: 2s; }   /* hold counts from the end of the entrance (data-loop-at in index.html) */
+
 /* fade-loop clips (see the script in index.html): hold the last frame for
    --hold-loop, then dim to the page background over --fade-loop instead of
    cutting to frame one */
@@ -878,6 +927,7 @@ video.shot--phone {
    they read as clickable; "·" between them when there are two */
 .page--study .page-links { margin-top: 28px; font-weight: 300; font-size: 16px; color: rgba(0, 0, 0, 0.5); }
 /* the underline is a border, so it runs under the arrow icon as well */
+.page--study .page-links + .page-links { margin-top: 10px; } /* a second link sits close under the first */
 .page--study .page-links a { display: inline-flex; align-items: center; gap: 4px; border-bottom: 0.5px solid color-mix(in srgb, currentColor 35%, transparent); padding-bottom: 1px; transition: border-color 0.18s ease; }
 .page--study .page-links a:hover { border-color: currentColor; }
 .page--study .page-links .sep { margin: 0 10px; color: rgba(0, 0, 0, 0.4); }
@@ -1011,6 +1061,11 @@ video.shot--phone {
    or the frame widths would resolve against it instead of the media block */
 picture {
   display: contents;
+}
+/* ...and its <source> tags must not become flex items of their own: each one
+   would count as a (0px) item and take a --clip-gap, so two halves never fit a row */
+picture > source {
+  display: none;
 }
 
 /* ── Tablet ───────────────────────────────────────────── */

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesopotamian Gods across Social Contexts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Serif+4:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper: #fff9ee; --ink: #000; --rule: #7a766a; }
+    html, body { margin: 0; height: 100%; background: #2a2724; overflow: hidden; }
+
+    /* The poster is laid out on a fixed 2800x4000 canvas (the Figma frame) and
+       scaled to the viewport width. --k is set by the script from the board width. */
+    /* The whole poster is fitted inside the screen (museum display): scale by the tighter axis, centre it. */
+    .board { position: fixed; inset: 0; }
+    /* paper grain — the Figma frame's monotone noise effect (size .1, density .35, black at 25%) */
+    .canvas::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 5; opacity: .09; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .canvas { position: absolute; left: 0; top: 0; width: 2800px; height: 4000px; transform-origin: 0 0; background: var(--paper); overflow: hidden; }
+    .canvas > * { position: absolute; }
+    .canvas svg.gods { left: 0; top: 0; width: 2800px; height: 4000px; overflow: visible; }
+
+    /* ---------- type ---------- */
+    .title { left: 306px; top: 115px; width: 2187px; margin: 0; font: 700 100px/normal 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .26em; text-align: center; color: var(--ink); opacity: .72; }
+    .subtitle { left: 0; top: 484px; width: 2800px; margin: 0; font: 500 48px/normal 'Cormorant Garamond', serif; letter-spacing: .19em; text-align: center; color: var(--ink); white-space: nowrap; }
+    .tier { left: 0; width: 2800px; margin: 0; text-align: center; color: var(--ink); }
+    .tier h2 { margin: 0; font: 600 60px/normal 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .39em; }
+    .tier p { margin: 8px 0 0; font: 400 48px/normal 'Cormorant Garamond', serif; }
+    .note { margin: 0; color: var(--ink); opacity: .7; }
+    .note h3 { margin: 0 0 10px; font: 600 25px/1.15 'Source Serif 4', serif; white-space: nowrap; }
+    .note p { margin: 0; font: 300 19px/1.32 'Source Serif 4', serif; }
+    .portrait { display: block; filter: grayscale(1); }   /* the Figma layers are desaturated; some source images are colour */
+    .legend-h { margin: 0; font: 500 48px/1 'Source Serif 4', serif; color: rgba(0,0,0,.6); white-space: nowrap; }
+    .legend-l { margin: 0 0 0 -150px; width: 300px; font: 400 33px/1 'Source Serif 4', serif; color: rgba(0,0,0,.6); text-align: center; white-space: nowrap; }
+    .legend-item { cursor: pointer; }
+
+    /* ---------- rules ---------- */
+    .rule { background: var(--rule); height: 3px; }
+    .rule--v { width: 4px; height: auto; background: rgba(116,82,52,.2); }
+    .diamond { fill: #4f4b43; }
+    .diamond--small { fill: var(--rule); }
+
+    /* ---------- gods ---------- */
+    .god { transform-box: fill-box; transform-origin: center; cursor: default; transition-delay: var(--d, 0s); transform: scale(0); opacity: 0; }
+    .god.in { transform: scale(1); opacity: 1; }
+    .god[data-god] .ticks { transform-box: fill-box; transform-origin: center; animation: spin var(--spin, 60s) linear infinite; animation-direction: var(--dir, normal); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ---- compare/: how the ring's ticks arrive (html[data-dash]) ---- */
+    .tick { transition-delay: calc(var(--d, 0s) + var(--i) * var(--tick-lag, .04s)); }
+    /* pop: one tick after another around the ring */
+    [data-dash="pop"] .tick { opacity: 0; transition: opacity var(--t-tick, .25s) ease; }
+    [data-dash="pop"] .god.in .tick { opacity: 1; }
+    /* grow: every tick draws outward from the inner edge */
+    [data-dash="grow"] .tick { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t-tick, .25s) cubic-bezier(.2,.7,.2,1); }
+    [data-dash="grow"] .god.in .tick { stroke-dashoffset: 0; }
+    /* spin: the whole ring winds in and settles */
+    .god .wind { transform-box: fill-box; transform-origin: center; }
+    [data-dash="spin"] .god[data-god] .wind { transform: rotate(calc(var(--wind-deg, 180) * -1deg)); transition: transform var(--t-wind, 1.4s) cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    [data-dash="spin"] .god[data-god].in .wind { transform: rotate(0deg); }
+    .god:hover { transition-delay: 0s; transform: scale(1.12); }
+    .god[data-god]:hover .ticks { animation-duration: 6s; }
+    /* legend filter: dim every god that doesn't match */
+    body[data-filter] .god[data-god]:not([data-match]) { opacity: .12; filter: saturate(.2); }
+
+    /* ---------- reveal ----------
+       Every element starts hidden and gets `.in` plus a --d delay from play()
+       below; the durations are the --t-* variables so they can be tuned live. */
+    :root { --t: .7s; }   /* each element gets its own --t from play() */
+    .fade { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); }
+    .fade.in { opacity: 1; }
+    .god { transition: transform var(--t) cubic-bezier(.2,.8,.2,1.2), opacity var(--t) ease, filter .3s ease; transition-delay: var(--d, 0s); }
+    .callout { fill: none; stroke: var(--rule); stroke-width: 3; opacity: .24; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t) cubic-bezier(.4,0,.2,1); transition-delay: var(--d, 0s); }
+    .callout.in { stroke-dashoffset: 0; }
+    .rule--v { transform-origin: top; transform: scaleY(0); transition: transform var(--t) cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    .rule--v.in { transform: scaleY(1); }
+    .title { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); }
+    .title.in { opacity: .72; }
+    .subtitle { opacity: 0; transition: opacity var(--t) ease; transition-delay: var(--d, 0s); }
+    .subtitle.in { opacity: 1; }
+    .rule--head { transform: scaleX(0); transition: transform var(--t) cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    .rule--head.l { transform-origin: right; } .rule--head.r { transform-origin: left; }
+    .rule--head.in { transform: scaleX(1); }
+    .ornament { transform: scale(0); transform-origin: center; transition: transform var(--t) cubic-bezier(.2,.8,.2,1.4); transition-delay: var(--d, 0s); }
+    .ornament.in { transform: scale(1); }
+
+    /* the legend fades in as one piece: no bloom, no rule draw, no stagger */
+    [data-el="legend"] { transform: none !important; transition: opacity var(--t) ease !important; transition-delay: var(--d, 0s) !important; }
+    .god[data-el="legend"] { opacity: 0; } .god[data-el="legend"].in { opacity: 1; }
+    .rule--v[data-el="legend"] { opacity: 0; } .rule--v[data-el="legend"].in { opacity: 1; }
+
+    .no-anim * { transition: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .god, .fade, .callout, .rule--v, .title, .subtitle, .rule--head, .ornament { transition: none !important; transform: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; letter-spacing: .26em; }
+      .title { opacity: .72 !important; } .callout { opacity: .24 !important; }
+      .god .ticks { animation: none !important; } .tick, .god .wind { transition: none !important; transform: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="board" id="board">
+  <div class="canvas" id="canvas">
+
+    <h1 class="title">Mesopotamian Gods across social contexts</h1>
+    <div class="rule rule--head l" style="left:423px;top:411px;width:934px"></div>
+    <div class="rule rule--head r" style="left:1444px;top:411px;width:934px"></div>
+    <svg class="ornament" style="left:1350px;top:400px" width="100" height="24" viewBox="0 0 100 24" aria-hidden="true">
+      <path class="diamond--small" d="M17.4 6.6 34.8 12.5 17.4 18.4 0 12.5Z"/>
+      <path class="diamond" d="M50 0 67.4 11.8 50 23.7 32.6 11.8Z"/>
+      <path class="diamond--small" d="M82.6 6.6 100 12.5 82.6 18.4 65.2 12.5Z"/>
+    </svg>
+    <p class="subtitle">How the needs of each social level shape which gods are worshipped</p>
+
+    <!-- EMPIRE -->
+    <section class="tier fade" data-sec="1" style="top:709px"><h2>Empire</h2><p>Centralized state religion</p></section>
+    <div class="rule rule--v" data-sec="1" style="left:1398px;top:908px;height:762px"></div>
+    <div class="note fade" data-sec="1" style="left:235px;top:981px;width:365px"><h3>Ishtar of Nineveh - 1400 BCE</h3><p>The Assyrian army's goddess. The only female war god in the pantheon. Kings claimed she appeared to them before battle - armored, carrying a bow. When the Assyrian empire fell, she vanished with it.</p></div>
+    <img class="portrait fade" data-sec="1" src="images/gods/inanna.png" alt="Relief of Inanna" style="left:250px;top:1534px;width:189px;height:233px">
+    <div class="note fade" data-sec="1" style="left:459px;top:1557px;width:318px"><h3>Inanna - 3200 BCE</h3><p>Worshipped for 3,600 years across 8 civilizations - longer and wider than any other god in the pantheon. She descended into the underworld, died, and came back. The price of her return: her own husband.</p></div>
+    <div class="note fade" data-sec="1" style="left:2128px;top:918px;width:255px"><h3>Enlil - 3400 BCE</h3><p>The oldest and most destructive war god. When humanity became too noisy, he sent a great flood. Every Mesopotamian king needed his blessing. Every city feared his anger.</p></div>
+    <img class="portrait fade" data-sec="1" src="images/gods/enlil.png" alt="Relief of Enlil" style="left:2399px;top:918px;width:150px;height:211px">
+    <div class="note fade" data-sec="1" style="left:2191px;top:1482px;width:387px"><h3>Nanna-Suen - 2100 BCE</h3><p>The only deified human king in the pantheon. His son declared him a god after his death to legitimize his own rule. Invented for political convenience, forgotten almost immediately - a mortal among immortals.</p></div>
+
+    <!-- TOWN -->
+    <section class="tier fade" data-sec="2" style="top:1760px"><h2>Town</h2><p>Local civic worship</p></section>
+    <div class="rule rule--v" data-sec="2" style="left:1398px;top:1959px;height:704px"></div>
+    <div class="note fade" data-sec="2" style="left:250px;top:2208px;width:294px"><h3>Ninkasi - 2600 BCE</h3><p>The goddess of beer. She didn't just bless the harvest - she invented brewing. The oldest beer recipe in history is written as a hymn to her.</p></div>
+    <div class="note fade" data-sec="2" style="left:2058px;top:2467px;width:299px"><h3>Tammuz - 2800 BCE</h3><p>Inanna's husband. Dragged to the underworld by demons while sitting on his throne. Women across Mesopotamia mourned him every year for 3,000 years.</p></div>
+    <img class="portrait fade" data-sec="2" src="images/gods/tammuz.png" alt="Statue of Tammuz" style="left:2373px;top:2395px;width:176px;height:228px">
+
+    <!-- HOUSEHOLD -->
+    <section class="tier fade" data-sec="3" style="top:2753px"><h2>Household</h2><p>Family based rituals</p></section>
+    <div class="rule rule--v" data-sec="3" style="left:1398px;top:2952px;height:433px"></div>
+    <img class="portrait fade" data-sec="3" src="images/gods/lamassu.png" alt="Statue of a Lamassu" style="left:250px;top:2853px;width:192px;height:271px">
+    <div class="note fade" data-sec="3" style="left:499px;top:2914px;width:293px"><h3>Lamassu - 2400 BCE</h3><p>The winged bull with a human face. Placed at the gates of palaces and homes. She didn't fight evil - she absorbed it. Every bad spirit that entered had to pass through her first.</p></div>
+    <div class="note fade" data-sec="3" style="left:2058px;top:3232px;width:323px"><h3>Pazuzu - 800 BCE</h3><p>The only death god worshipped in the home. A demon kept at the front door - four wings, a scorpion tail, a rotting face. His ugliness was the point. You invited the monster in to protect your children.</p></div>
+    <img class="portrait fade" data-sec="3" src="images/gods/pazuzu.png" alt="Statue of Pazuzu" style="left:2406px;top:3214px;width:143px;height:228px">
+
+    <!-- LEGEND -->
+    <div class="rule fade" data-sec="4" style="left:234px;top:3554px;width:2331px;background:rgba(122,118,106,.5);--d:0s"></div>
+    <div class="rule rule--v" data-sec="4" style="left:880px;top:3614px;height:269px;background:rgba(122,118,106,.5);width:3px"></div>
+    <div class="rule rule--v" data-sec="4" style="left:1918px;top:3614px;height:269px;background:rgba(122,118,106,.5);width:3px"></div>
+    <div class="rule rule--v" data-sec="4" style="left:2244px;top:3751px;height:122px"></div>
+    <p class="legend-h fade" data-sec="4" style="left:346px;top:3625px">Cultural prominence</p>
+    <p class="legend-h fade" data-sec="4" style="left:1100px;top:3625px;width:600px;text-align:center">God’s domain</p>
+    <p class="legend-h fade" data-sec="4" style="left:2175px;top:3625px">Gender</p>
+    <svg class="fade" data-sec="4" style="left:489px;top:3780px" width="100" height="14" viewBox="0 0 100 14" aria-hidden="true"><path d="M0 7H92M86 1l7 6-7 6" fill="none" stroke="#747474" stroke-width="2.1"/></svg>
+    <p class="legend-l fade" data-sec="4" style="left:457px;top:3850px">Low</p>
+    <p class="legend-l fade" data-sec="4" style="left:641px;top:3850px">High</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="war" style="left:1008px;top:3850px">War</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="creation" style="left:1151px;top:3850px">Creation</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="justice" style="left:1309px;top:3850px">Justice</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="wisdom" style="left:1466px;top:3850px">Wisdom</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="death" style="left:1616px;top:3850px">Death</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="fertility" style="left:1764px;top:3850px">Fertility</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="female" style="left:2166px;top:3850px">Female</p>
+    <p class="legend-l legend-item fade" data-sec="4" data-filter="male" style="left:2334px;top:3850px">Male</p>
+
+    <svg class="gods" id="gods" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2800 4000">
+      <!-- callout lines (pathLength=1 so the draw-on is a 0→1 dash) -->
+      <path class="callout" data-sec="1" pathLength="1" d="M1183.5 1225 L1142.5 1184 L235 1184"/>
+      <path class="callout" data-sec="1" pathLength="1" d="M1048.5 1614 L974 1786.5 L233.5 1786.5"/>
+      <path class="callout" data-sec="1" pathLength="1" d="M1959.5 951.5 L1988.7 898 L2575.2 898"/>
+      <path class="callout" data-sec="1" pathLength="1" d="M1900.5 1448 L1912 1462 L2565 1462"/>
+      <path class="callout" data-sec="2" pathLength="1" d="M1035.5 2405 L1007.5 2384.5 L233.5 2384.5"/>
+      <path class="callout" data-sec="2" pathLength="1" d="M1680 2600.5 L1704.5 2643 L2565.5 2643"/>
+      <path class="callout" data-sec="3" pathLength="1" d="M1129 3081.5 L1074.5 3144 L233.5 3144"/>
+      <path class="callout" data-sec="3" pathLength="1" d="M1726.5 3171.5 L1739.5 3194 L2565.5 3194"/>
+      <g id="godLayer"></g>
+    </svg>
+
+  </div>
+</div>
+
+<script>
+(() => {
+  const COLORS = { war:'#c6453d', creation:'#bb7db6', justice:'#d4a72c', wisdom:'#4a73c2', death:'#434343', fertility:'#3b8c4b', grey:'#747474' };
+  // x, y, size, domain, gender  — top-left and diameter on the 2800x4000 canvas (from Figma)
+  const GODS = [
+    // Empire, left (female)
+    [1062,1266.6,70.8,'wisdom','f'],[1136.8,1294.2,63,'wisdom','f'],[1239.1,1380.7,70.8,'justice','f'],[1195.8,1243,51.2,'war','f'],
+    [1010.9,1416.1,173.1,'fertility','f'],[881,1467.3,122,'fertility','f'],[991.2,1325.6,94.4,'fertility','f'],[1180.1,1518.4,70.8,'fertility','f'],
+    [1156.4,1372.9,70.8,'fertility','f'],[1093.5,1349.2,59,'fertility','f'],[963.6,1416.1,51.2,'fertility','f'],[1195.8,1451.6,51.2,'fertility','f'],
+    [1207.6,1306,70.8,'creation','f'],
+    // Empire, right (male)
+    [1627,1112,145.6,'war','m'],[1784,1136,94.4,'war','m'],[1751,1069,63,'war','m'],[1550,1198.2,66.9,'war','m'],[1892,1132,59,'war','m'],
+    [1757,1005,51.2,'war','m'],[1758,1232,59,'war','m'],[1773,936,59,'war','m'],[1691.6,1036.9,59,'war','m'],[1616.9,1052.6,59,'war','m'],
+    [1706,954,51.2,'war','m'],[1628.7,970,70.8,'war','m'],[1821,965,157.4,'war','m'],
+    [1636.6,1457.9,129.9,'justice','m'],[1719.3,1343.9,129.9,'justice','m'],[1767.9,1538.1,51.2,'justice','m'],[1829.8,1450.5,66.9,'justice','m'],
+    [1825.1,1524.5,63,'justice','m'],[1647.4,1393.9,59,'justice','m'],[1771.8,1479.1,51.2,'justice','m'],[1862,1406,38,'justice','m'],
+    [1491,1276.9,122,'wisdom','m'],[1620.8,1328,63,'wisdom','m'],[1612.9,1257.2,59,'wisdom','m'],[1683.8,1272.9,78.7,'creation','m'],
+    [1514.6,1473.6,114.1,'fertility','m'],[1565.7,1398.9,70.8,'fertility','m'],[1498.8,1414.6,59,'fertility','m'],
+    // Town, left (female)
+    [1049.4,2385.7,94.4,'fertility','f'],[1033.7,2488,94.4,'fertility','f'],[958.9,2511.6,70.8,'fertility','f'],[986.5,2440.8,63,'fertility','f'],
+    [1136,2468.3,114.1,'justice','f'],[1151.7,2401.5,63,'justice','f'],
+    [1085,2215,90.5,'death','f'],[1022,2312,70.8,'death','f'],[1011,2243,63,'death','f'],[1105,2146,59,'death','f'],[1038,2173,59,'death','f'],
+    [1250.1,2291.3,59,'creation','f'],[1226.5,2397.5,59,'creation','f'],[1187.2,2334.6,63,'creation','f'],[1183.2,2263.7,59,'creation','f'],
+    [1105,2316,70.8,'wisdom','f'],
+    // Town, right (male)
+    [1577.4,2436.9,145.6,'fertility','m'],[1553.8,2377.8,70.8,'fertility','m'],[1636.5,2354.2,70.8,'fertility','m'],[1703.4,2393.6,63,'fertility','m'],
+    [1730.9,2460.5,51.2,'fertility','m'],[1727,2523.4,59,'fertility','m'],[1530.2,2228.3,137.7,'wisdom','m'],[1679.7,2263.7,94.4,'wisdom','m'],
+    [1609,1989.7,114.1,'death','m'],[1673,2102.7,94.4,'death','m'],[1565.6,2118.1,98.4,'death','m'],[1534.2,2051.2,70.8,'death','m'],
+    [1731,2033,70.8,'death','m'],[1490.9,2110.3,59,'death','m'],[1724,2198.7,63,'death','m'],[1510.5,2177.2,55.1,'death','m'],
+    [1654.2,2200.8,51.2,'death','m'],[1789.9,2495.9,51.2,'justice','m'],
+    // Household, left (female)
+    [1140,2982,90.5,'wisdom','f'],[1167.7,3080.4,70.8,'wisdom','f'],[1112.6,3139.4,70.8,'wisdom','f'],[1231,3036,59,'wisdom','f'],
+    [1140.1,3222.1,82.6,'fertility','f'],[1234.6,3233.9,70.8,'fertility','f'],[1195.2,3159.1,70.8,'fertility','f'],[1250.3,3104,59,'creation','f'],
+    // Household, right (male)
+    [1565.4,3080.4,94.4,'wisdom','m'],[1541.8,3178.8,82.6,'wisdom','m'],[1490.7,3119.8,70.8,'wisdom','m'],[1502.5,3037.1,70.8,'wisdom','m'],
+    [1636.2,3163.1,70.8,'wisdom','m'],[1612.6,3245.7,59,'justice','m'],[1673.6,3100.1,59,'death','m'],
+  ];
+  const LEGEND = [
+    [973,3751,71.3,'war','m'],[1115.1,3751,71.3,'creation','m'],[1273.6,3751,71.3,'justice','m'],[1430.1,3751,71.3,'wisdom','m'],
+    [1580.6,3751,71.3,'death','m'],[1728.6,3751,71.3,'fertility','m'],
+    [442.7,3772.3,28.7,'grey','m'],[599.3,3744.3,84.7,'grey','m'],[2130.9,3751,71.3,'grey','f'],[2298.9,3751,71.3,'grey','m'],
+  ];
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (t, a) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
+
+  // One god = four concentric circles in a single colour (ratios measured from the Figma component).
+  function god([x, y, S, dom, g], i, isLegend) {
+    const c = COLORS[dom], r = S / 2;
+    const wrap = el('g', { transform: `translate(${(x + r).toFixed(1)} ${(y + r).toFixed(1)})` });
+    const gg = el('g', { class: 'god' });
+    if (!isLegend) { gg.dataset.god = ''; gg.dataset.domain = dom; gg.dataset.gender = g === 'f' ? 'female' : 'male'; }
+    const sw = S * .162, rd = r - sw / 2, C = 2 * Math.PI * rd, N = Math.max(14, Math.round(S / 5));
+    // the dashed ring = N short ticks, each its own element so it can animate on its own
+    const wind = el('g', { class: 'wind' }), ticks = el('g', { class: 'ticks' });
+    ticks.style.setProperty('--spin', `calc(var(--t-spin, 60s) * ${(0.7 + S / 180).toFixed(2)})`);   // bigger rings turn slower
+    ticks.style.setProperty('--dir', i % 2 ? 'reverse' : 'normal');
+    const tw = (C / N * .6).toFixed(2);
+    for (let k = 0; k < N; k++) {
+      const t = el('line', { class: 'tick', x1: (r - sw).toFixed(2), x2: r.toFixed(2), y1: 0, y2: 0, stroke: c, 'stroke-width': tw, pathLength: 1, transform: `rotate(${(k * 360 / N).toFixed(2)})` });
+      t.style.setProperty('--i', k);
+      ticks.append(t);
+    }
+    wind.append(ticks); gg.append(wind);
+    gg.append(el('circle', { r: (r - 1).toFixed(2), fill: 'none', stroke: c, 'stroke-width': 2 }));           // thin outer ring
+    gg.append(el('circle', { r: (r * .63 - 1).toFixed(2), fill: 'none', stroke: c, 'stroke-width': 2 }));     // thin middle ring
+    if (g === 'f') gg.append(el('circle', { r: (r * .545 - S * .08).toFixed(2), fill: 'none', stroke: c, 'stroke-width': (S * .16).toFixed(2) })); // hollow centre
+    else gg.append(el('circle', { r: (r * .51).toFixed(2), fill: c }));                                      // solid centre
+    wrap.append(gg);
+    return gg;
+  }
+
+  const layer = document.getElementById('godLayer');
+  const secOf = y => y < 1700 ? 1 : y < 2700 ? 2 : y < 3500 ? 3 : 4;
+  const perSec = {};
+  GODS.forEach((d, i) => {
+    const g = god(d, i, false); g.dataset.sec = secOf(d[1]);
+    layer.append(g.parentNode);
+  });
+  LEGEND.forEach((d, i) => { const g = god(d, i, true); g.dataset.sec = 4; layer.append(g.parentNode); });
+
+  // ---- scale the 2800px canvas to the board ----
+  const board = document.getElementById('board'), canvas = document.getElementById('canvas');
+  const fit = () => {
+    const k = Math.min(board.clientWidth / 2800, board.clientHeight / 4000);
+    canvas.style.transform = `scale(${k.toFixed(5)})`;
+    canvas.style.left = ((board.clientWidth - 2800 * k) / 2).toFixed(1) + 'px';
+    canvas.style.top = ((board.clientHeight - 4000 * k) / 2).toFixed(1) + 'px';
+  };
+  new ResizeObserver(fit).observe(board); fit();
+
+  // ---- the entrance: one timed sequence, ordered by ELEMENT TYPE ----
+  // Tag every animated element with its type.
+  const typeOf = n => {
+    if (n.classList.contains('title')) return 'title';
+    if (n.classList.contains('ornament')) return 'ornament';
+    if (n.classList.contains('rule--head')) return 'rule';
+    if (n.classList.contains('subtitle')) return 'subtitle';
+    if (n.dataset.sec === '4') return 'legend';
+    if (n.classList.contains('tier')) return 'tier';
+    if (n.classList.contains('rule--v')) return 'divider';
+    if (n.classList.contains('god')) return 'gods';
+    if (n.classList.contains('callout')) return 'callout';
+    if (n.classList.contains('note')) return 'note';
+    if (n.classList.contains('portrait')) return 'portrait';
+    return null;
+  };
+  const ALL = [...document.querySelectorAll('.title, .rule--head, .ornament, .subtitle, [data-sec], .god')];
+  ALL.forEach(n => { const t = typeOf(n); if (t) n.dataset.el = t; });
+
+  // SEQ: which step each type plays in (same number = together), plus timing.
+  const SEQ = {
+    step: { title: 1, ornament: 2, rule: 2, subtitle: 2, tier: 3, gods: 4, divider: 5, callout: 6, note: 7, portrait: 7, legend: 8 },
+    gap: 0.05,        // default s between one step finishing and the next starting
+    gaps: { 1: 0, 3: 0, 4: 0, 7: 1 }, // per-step override: { stepNumber: s } — the pause AFTER that step
+    overlap: 0.5,     // 0 = a step waits for the previous to finish; 0.5 = it starts when the previous is half done
+    // how long one element of each type takes (s)
+    dur: { title: 0.6, ornament: 0.5, rule: 0.6, subtitle: 0.7, tier: 0.7, divider: 0.4, gods: 0.25, callout: 0.5, note: 0.7, portrait: 0.7, legend: 0.7 },
+    tierLag: 0.4,     // s between Empire, Town and Household within a step
+    godStagger: 0.03, // s between one god and the next
+    itemLag: 0.12,    // s between items of the same type in one tier (notes, callouts…)
+    dash: 'spin',     // how the ring's ticks arrive: 'pop' | 'grow' | 'spin' | 'none'
+    tickLag: 0.02,    // s from one tick to the next (pop)
+    tick: 0.15,       // s one tick takes to appear (pop / grow)
+    wind: 1.4,        // s the ring takes to spin in and settle (spin)
+    windDeg: 180,     // how far it turns while settling (spin)
+    spin: 16,         // s per lap for the resting rotation (scaled by size)
+  };
+  // how long one type takes to finish once started
+  const span = t => {
+    const items = ALL.filter(n => n.dataset.el === t);
+    const tiers = new Set(items.map(n => n.dataset.sec || 0)).size;
+    const perTier = Math.max(...[1,2,3,4,0].map(s => items.filter(n => (n.dataset.sec || 0) == s).length));
+    const lag = t === 'gods' ? SEQ.godStagger : t === 'legend' ? 0 : SEQ.itemLag;
+    const dur = SEQ.dur[t];
+    const extra = t === 'gods' ? (SEQ.dash === 'pop' ? 40 * SEQ.tickLag + SEQ.tick : SEQ.dash === 'spin' ? SEQ.wind - dur : 0) : 0;
+    return (tiers - 1) * (t === 'gods' ? 0 : SEQ.tierLag) + (perTier - 1) * lag + dur + Math.max(0, extra);
+  };
+  const play = () => {
+    for (const k of ['wind','spin']) document.documentElement.style.setProperty('--t-' + k, SEQ[k] + 's');
+    document.documentElement.style.setProperty('--wind-deg', SEQ.windDeg);
+    document.documentElement.style.setProperty('--tick-lag', SEQ.tickLag + 's');
+    document.documentElement.style.setProperty('--t-tick', SEQ.tick + 's');
+    document.documentElement.dataset.dash = SEQ.dash;
+    const steps = [...new Set(Object.values(SEQ.step))].sort((a, b) => a - b);
+    const start = {}; let t = 0;
+    steps.forEach(st => { const types = Object.keys(SEQ.step).filter(k => SEQ.step[k] === st); types.forEach(k => start[k] = t); t += Math.max(...types.map(span)) * (1 - SEQ.overlap) + (SEQ.gaps[st] ?? SEQ.gap); });
+    const count = {};
+    ALL.forEach(n => {
+      const ty = n.dataset.el; if (!ty) return;
+      const sec = n.dataset.sec || 0, key = ty + sec, i = (count[key] = (count[key] || 0));
+      count[key]++;
+      let d = start[ty];
+      if (ty === 'gods') d += (count.__g = (count.__g || 0)) * SEQ.godStagger, count.__g++;
+      else d += (sec > 0 && sec < 4 ? (sec - 1) * SEQ.tierLag : 0) + i * (ty === 'legend' ? 0 : SEQ.itemLag);
+      n.style.setProperty('--d', d.toFixed(3) + 's');
+      n.style.setProperty('--t', SEQ.dur[ty] + 's');
+    });
+    // snap everything back to hidden with transitions off, then release and start
+    document.documentElement.classList.add('no-anim');
+    ALL.forEach(n => n.classList.remove('in'));
+    void document.body.offsetWidth;
+    requestAnimationFrame(() => { document.documentElement.classList.remove('no-anim'); void document.body.offsetWidth;
+      requestAnimationFrame(() => ALL.forEach(n => n.classList.add('in'))); });
+    return t;
+  };
+  window.GODS = { SEQ, play, ALL };
+  play();
+
+  // ---- legend filter: hover previews, click pins ----
+  let pinned = null;
+  const set = f => { if (f) document.body.dataset.filter = f; else delete document.body.dataset.filter;
+    document.querySelectorAll('.god[data-god]').forEach(g => { const hit = f && (g.dataset.domain === f || g.dataset.gender === f); if (hit) g.dataset.match = ''; else delete g.dataset.match; }); };
+  document.querySelectorAll('.legend-item').forEach(li => {
+    li.addEventListener('mouseenter', () => set(li.dataset.filter));
+    li.addEventListener('mouseleave', () => set(pinned));
+    li.addEventListener('click', () => { pinned = pinned === li.dataset.filter ? null : li.dataset.filter; set(pinned); });
+  });
+})();
+</script>
+<script src="_debug-bus.js"></script>
+<script src="_debug-inspect.js"></script>
+<script src="_debug-sequence.js"></script>
+</body>
+</html>
