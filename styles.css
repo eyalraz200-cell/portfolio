@@ -1291,10 +1291,6 @@ picture > source {
   .page--rud .process-row .shot { flex-basis: auto; }
 }
 
-/* a finished project held back from the live site: shown on the dev server only (html.dev) */
-.project--held { display: none; }
-html.dev .project--held { display: flex; } /* .project is a centred flex column; block would drop it to the left */
-
 /* the hidden attribute always wins over a component display rule */
 [hidden] {
   display: none !important;
