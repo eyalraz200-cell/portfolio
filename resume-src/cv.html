@@ -10,7 +10,7 @@
   /* 1 Figma px == 1pt; the A4 frame is 595 x 842 */
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; margin: 0; }
-  html, body { width: 595pt; height: 842pt; }
+  html, body { width: 210mm; height: 297mm; }  /* exact A4; the layout below is in pt, 1 Figma px = 1pt */
   body {
     position: relative; overflow: hidden;
     background: #fff; color: #000;
@@ -20,7 +20,7 @@
   a { color: inherit; text-decoration: none; }
 
   /* ── header band ── */
-  .band { position: absolute; left: 0; top: 0; width: 595pt; height: 150pt; background: #000; color: #fff; }
+  .band { position: absolute; left: 0; right: 0; top: 0; height: 150pt; background: #000; color: #fff; }
   .photo {
     position: absolute; left: 29.29pt; top: 25pt;
     width: 100.31pt; height: 100.31pt; border-radius: 50%; overflow: hidden;
